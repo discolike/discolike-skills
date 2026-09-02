@@ -1,0 +1,10 @@
+{
+  "name": "discolike",
+  "description": "Company search for agents: find target accounts, firmographics, technographics, and contacts across 80M+ business websites via the DiscoLike MCP server, CLI, or Python SDK.",
+  "version": "0.1.0",
+  "author": { "name": "DiscoLike", "email": "support@discolike.com" },
+  "homepage": "https://discolike.com/mcp/",
+  "repository": "https://github.com/Discolike/discolike-skills",
+  "license": "MIT",
+  "keywords": ["mcp", "b2b-data", "company-search", "sales-intelligence", "gtm", "lookalike", "icp"]
+}

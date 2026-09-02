@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "discolike",
+  "description": "DiscoLike skills for coding agents: company discovery, enrichment, and contacts across 80M+ business websites.",
+  "owner": { "name": "DiscoLike", "url": "https://discolike.com" },
+  "plugins": [
+    {
+      "name": "discolike",
+      "description": "Find target accounts, firmographics, technographics, and contacts with DiscoLike. Knows when to use the MCP server, CLI, or Python SDK, and how to open an account without a browser.",
+      "source": "./",
+      "category": "data",
+      "homepage": "https://discolike.com/mcp/",
+      "keywords": ["mcp", "b2b-data", "company-search", "sales-intelligence", "gtm"]
+    }
+  ]
+}
