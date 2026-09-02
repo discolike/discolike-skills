@@ -130,9 +130,56 @@ New account, no ICP written down, or "set up my ICP".
 4. **Route.** `yes` rows go to the campaign with the evidence quote carried as a merge field, so the first line of outreach cites the fact. Everything else goes to a separate list or waits for the next signal.
 5. **Contacts** for the qualified set only, Flow 1 steps 4 and 5.
 
+### Flow 8: technology and infrastructure targeting
+
+"Companies running Shopify and Klaviyo", "who uses SendGrid", "who advertises on Meta", "what does acme.com run".
+
+1. **Which direction.** Find companies that use a vendor: `tech_stack` on discover or count, CLI `--tech-stack shopify.com`, SDK `DiscoverParams(tech_stack=[...])`, MCP `discover-similar-companies`. Find what one company uses: MCP `vendor-and-technology-data` with `match=client`, CLI `discolike company vendors acme.com --format json`, SDK `client.companies.vendors(CompaniesVendorsParams(domain="acme.com", match="client"))`. `match=vendor` on the same call lists a vendor's clients.
+2. **Vendors are domains.** `shopify.com`, `hubspot.com`, `klaviyo.com`, up to 20 per search. Count each vendor alone first; anything under about 1,000 companies worldwide is too thin to build a segment on.
+3. **AND, not OR.** Multiple `tech_stack` values are OR by default. Prefix with `+` to require all: `+shopify.com +klaviyo.com +gorgias.com`. Same rule for `phrase_match`.
+4. **Fragmented stacks.** Consolidation pitches want companies on point tools with no suite. AND the point tools, then `negate_tech_stack` the suites that would replace them (`salesforce.com`, `hubspot.com`).
+5. **Advertisers.** Meta: `facebook.net` (pixel), `facebook.com`, `meta.com`, `instagram.com`. Google Ads, tight: `doubleclick.net`, `googlesyndication.com`, `googleadservices.com`. Google, broad: `googletagmanager.com` and analytics domains, which most advertisers have and many non-advertisers too. Pixel present is binary; spend or volume is a DiscoGen estimate, see below.
+6. **Email sending stack.** Filter on the ESP or sequencer as `tech_stack` (`sendgrid.com`, `instantly.ai`, `smartlead.ai`, `mailgun.com`, `marketo.com`). The discover response carries `mx_provider` inline (`google.com`, `microsoft.com`, `no_mx` means the domain does not receive mail, a parked-domain filter). Sending-domain portfolio size: reverse redirects, MCP `domain-redirects` with `match=linked`, CLI `discolike company redirects acme.com --match linked`, SDK `client.companies.redirects(CompaniesRedirectsParams(domain=..., match="linked"))`, or bulk `append` with dataset `redirects` for `redirect_count`. Newest rotated domains can lag a crawl cycle.
+7. **Detection limits.** Signals come from scripts, meta tags, tag-manager containers, and certificates on the public site. A tool with no web-facing footprint (a CRM used only internally) will not show; an empty result means no public signal, not no tool. Vendors that provision customers on subdomains (`client.vendor.com`) are not mapped automatically; pull the vendor's certificate set, extract the client names, and run them through Flow 3 bulk match. There is no Google Business Profile filter; that is a DiscoGen question.
+
+### Flow 9: rank or filter a list the user already has
+
+"Score these 3,000 accounts against our ICP", "which of our customers run HubSpot", "run research on this list".
+
+1. **Load the list.** A saved domain list serves as inclusion scope as well as exclusion; the upload path is the same. MCP `save-exclusion-list`; CLI `discolike queries create-exclusion-list --name "crm-accounts" --domain a.com --domain b.com`; SDK `client.queries.create_exclusion_list(CreateExclusionListRequest(query_name="crm-accounts", domains=[...]))`. Minimum 20 domains. Names first? Flow 3.
+2. **Rank it.** Discover with `inclusion_query_id` set to that list plus an `icp_prompt` or seed domains; the response is the user's own companies ordered by similarity, with firmographics. Available from Starter. CLI passes it as `--param inclusion_query_id=<id>`; SDK `DiscoverParams(inclusion_query_id=[...], icp_prompt=...)`.
+3. **Bucket it.** Same call with `tech_stack` instead of a prompt returns only the companies on that vendor. Repeat per vendor to split the list.
+4. **Research it.** Point DiscoGen, validate-icp, or ContaGen at the list directly, up to 10,000 domains per run. Rows the user pulled in the last 90 days are cached, so DiscoLike-side cost is the submit fee.
+5. **Explain the gaps.** Domains that return no profile are not lost: `append` with dataset `domain_status` says why (non-business, parked, dead, redirect, no certificate).
+
+## When results look wrong
+
+Work top to bottom; the first fix usually ends it. Adding more exclusion language is almost never the answer.
+
+1. **Negations inside the ICP text.** "Does not sell apparel, candles, supplements" in `icp_prompt` or `icp_text` pulls results toward those words; the text is matched on meaning, not read as rules. Strip every negative clause; describe only what the ideal company is.
+2. **A positive category too broad.** E-Commerce admits every DTC brand. Pick the narrowest positive category that still contains the targets before touching any negation.
+3. **Seeds that bridge into the noise.** Seeds are the strongest signal in the search. Read each seed with `extract-website-text`: a fitness wearable site reads as running and wellness, so sportswear follows. Do not mix sub-verticals in one search; run them separately, net-new billing makes the split free for repeats.
+4. **A seed that is the wrong company.** Guessed domains resolve to the wrong business. Confirm each seed with `extract-website-text` before the first pull.
+5. **Boilerplate phrases.** `phrase_match` is OR, and "shop now", "free shipping", "official store" appear on every storefront, so they pass everything. Drop them; prefix product-specific phrases with `+` to require them.
+6. **Bleed inside your own categories.** Negating a category or phrase only catches companies classified there or using that word. Recurring offenders go on an exclusion list; that is the backstop, not more text.
+7. **Precision levers.** `min_digital_footprint` defaults to 50 on a 0 to 800 scale; lowering it surfaces real companies with thin sites and usually moves the count more than headcount does, so step down gradually and look. `employee_range` "201,+" keeps the 10001+ bucket that "201,10000" drops. Industry Variance is an app-side control on the Precision panel: MEDIUM is default, HIGH is the one step that lets the ranked list run materially further, UNRESTRICTED turns the guard off and is not a mining mode. The real end of a niche is when results stop looking like fits, not when a count stops falling.
+8. **Counts that do not add up.** A vendor or country badge is a single-criterion worldwide total. Walk the chain with `count`, adding one filter at a time, and the drop becomes visible and explainable.
+
 ### DiscoGen, when a question is not a filter
 
-"Do they sell to hospitals?", "Is pricing public?", "Who is their CEO?" are research prompts, not filters. MCP `run-discogen` on a domain list with `web_search=true`, one call for the whole list, never one call per domain. CLI `discolike discogen ...`. SDK `client.discogen.process(DiscoGenProcessRequest(query=..., domains=[...], web_search=True))` then `job.wait()`. One question per call. Ask for a yes/no, a short quote from the page as evidence, and a confidence; treat an empty answer as abstain, never as no. Runs on the user's own LLM key; each domain sends its full context, so cost scales with list size.
+"Do they sell to hospitals?", "Is pricing public?", "Estimated monthly ad spend?" are research prompts, not filters. MCP `run-discogen` on a domain list with `web_search=true`, one call for the whole list, never one call per domain and never split across parallel tasks: all tasks share the user's provider key and rate-limit each other. CLI `discolike discogen ...`. SDK `client.discogen.process(DiscoGenProcessRequest(query=..., domains=[...], web_search=True))` then `job.wait()`. Runs on the user's own LLM and search keys; DiscoLike bills a submit fee plus net-new records, and records from the last 90 days are cached, so a rerun costs the submit fee.
+
+Rules that decide whether the column is usable:
+
+- **Narrow first.** DiscoGen hit rate is set by its input. Do all the filtering Discover can do (`phrase_match` "case study", `tech_stack`, category, geo) before dispatching; a tight list beats validating a noisy one after.
+- **Preview on known answers.** Dry-run the prompt on 20 to 50 domains where the user already knows the truth, fix the prompt, then run the list.
+- **Numbered questions become columns.** "1. Is the industry classification accurate, yes or no. 2. Do they have US engineers." returns two columns in one pass. Keep it to a few; eight questions at once degrade all of them.
+- **Two passes, two models.** Pass 1: extraction-only questions on the full list with a cheap model. Filter on that column. Pass 2: the reasoning question on the survivors with a strong model. Same or lower cost, better accuracy.
+- **Yes/no prompts.** Ask for `answer` yes/no/unknown, `evidence` as a short quote, `confidence` 0 to 1. Treat unknown as abstain, never as no. Do not list example nouns ("YES examples: drums, pallets"); models match the nouns instead of the criterion. Do not put conflicting criteria in one prompt.
+- **Estimates.** Traffic, ad spend, headcount growth: the number is rarely public. Conservative models return "not available" on most rows. Use a Google model, ask for a range and an above/below threshold, and label the output directional.
+- **Search provider over native web search.** A dedicated search provider (Serper and the other BYOS options) returns compact snippets and a fixed per-search price. The model's built-in search at high context pulls unpredictable page content and can run several times the estimate. Never pick an OpenAI `-search-preview` model; those search on every call regardless of the toggle. Lower search depth before raising the model tier.
+- **ContaGen is extraction.** Names and titles out of search results. Use the latest Haiku or a GPT mini class model; a reasoning model costs several times more for the same triples. It searches the open web, it does not crawl a site's team page on demand. Niche titles (head of procurement, logistics manager) have low fill rates because they are sparse online; that is data availability, not a failed run.
+- **Model reasoning is non-deterministic.** Borderline rows flip between runs and between models. Report the yes count with the model name attached.
 
 ## Examples
 
