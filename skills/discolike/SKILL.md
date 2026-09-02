@@ -44,7 +44,7 @@ Three ways to describe the target, all on the same `discover` call. Combine them
 | Size the set | `count` with the same filters | Free. Do this before a large `discover`. |
 | Cap spend | `max_records` | Start with 100 to 500 to check fit, then scale. |
 
-Each search bills a query fee plus a fee per 1,000 new records. Records seen in the last 90 days are free. Results cap at 10,000 per call; for more, save results and use them as an exclusion list on the next call.
+Each search bills a query fee plus a fee per 1,000 new records. Records seen in the last 90 days are free. Results cap at 10,000 per call; for more, put what you have into an exclusion list and run the next call with `exclusion_query_id`. Exclusion lists hold up to 250,000 domains and 500,000 contacts on every plan.
 
 ## After discovery
 
@@ -65,7 +65,7 @@ Before any flow: check spend with MCP `account-status`, CLI `discolike account u
 Build a target list, confirm fit, get named people, then fill the gaps with live web research.
 
 1. **Size it.** MCP `count-matching-domains`. CLI `discolike count --phrase-match "..." --country US`. SDK `client.count(CountParams(...))`. Free.
-2. **Discover.** MCP `discover-similar-companies`. CLI `discolike discover --icp-prompt "..." --domain seed.com --country US --max-records 500 --format json`. SDK `client.discover(DiscoverParams(icp_prompt=..., domain=[...], max_records=500))`. Start at 100 to 500, inspect, then scale. Do not set an employee minimum unless asked; small-company headcount data is thin and rarely what disqualifies. Save every pull: MCP `save-mcp-query`, CLI `discolike queries save-results --name "..." --action discover --input results.json --domain-column domain`, SDK `client.queries.save_results(SaveResultsRequest(query_name=..., action="discover", data=[...], domain_column="domain"))`. The saved id becomes `exclusion_query_id` on the next pull so rounds never overlap.
+2. **Discover.** MCP `discover-similar-companies`. CLI `discolike discover --icp-prompt "..." --domain seed.com --country US --max-records 500 --format json`. SDK `client.discover(DiscoverParams(icp_prompt=..., domain=[...], max_records=500))`. Start at 100 to 500, inspect, then scale. Do not set an employee minimum unless asked; small-company headcount data is thin and rarely what disqualifies. After every pull, add its domains to an exclusion list: MCP `save-exclusion-list`, CLI `discolike queries create-exclusion-list --name "tam-round-1" --domain a.com --domain b.com --tag tam`, SDK `client.queries.create_exclusion_list(CreateExclusionListRequest(query_name="tam-round-1", domains=[...], tags=["tam"]))`. Pass that list's id as `exclusion_query_id` on the next pull so rounds never overlap. Save the search itself with `save-mcp-query` or `queries save-results` only when you want to rerun it later.
 3. **Verify fit.** MCP `validate-icp-fit`. CLI `discolike validate-icp --icp "..." --domain a.com --domain b.com --wait --format json` (or `--file domains.csv`). SDK `job = client.validate_icp(ValidateIcpRequest(icp_text=..., domains=[...], web_search=True)); job.wait()`. Returns yes/partial/no with reasoning per domain. Keep `yes`, review `partial`, drop `no`. A 60 to 70 percent yes rate on a first pull is normal, not a failed search. Uses the account's LLM provider key.
 4. **Contacts.** MCP `search-contacts`. CLI `discolike contacts search --domain a.com --domain b.com --seniority executive --department Sales --has-email --format json`. SDK `client.contacts.search(ContactsSearchParams(domain=[...], seniority=["executive"], department=["Sales"], has_email=True, max_records=200))`. Billed per new contact record. `--icp-prompt` on contacts search derives persona filters from a sentence.
 5. **ContaGen for the rest.** For domains where step 4 returned nobody, MCP `generate-contacts`. CLI `discolike contacts generate --icp-text "VP Sales or Head of Revenue" --domain a.com --domain b.com --wait --format json`. SDK `job = client.contacts.generate(ContactGenerateRequest(icp_text=..., domains=[...], max_contacts_per_domain=3)); job.wait()`. Runs live web search per company on the user's own LLM and search provider keys; every email is verified before it is shown. No platform billing. Treat output as candidates.
@@ -94,7 +94,7 @@ The user has their customers and wants to know what kinds of companies they actu
 
 1. **Segment.** MCP `segment-domains`. CLI `discolike segment --file customers.csv --domain-column website --max-segments 6 --wait --format json`. SDK `job = client.segment_file(SegmentFileParams(domain_column="website", max_segments=6), file=open("customers.csv", "rb")); job.wait()`, or `client.segment(SegmentParams(domains="a.com,b.com,...", max_segments=6))` for an inline list. Output: clusters with an auto-written description and a probability per domain.
 2. **Read the clusters.** Present each segment's description and size. Ask which segments matter; the biggest is not always the best.
-3. **Lookalikes per segment.** For a chosen segment, run Flow 1 step 2 with that segment's top domains as `domain` seeds (up to 10) and its description as `icp_prompt`. Exclude the existing customers with `exclude_domain` or a saved exclusion list (`client.queries.create_exclusion_list`).
+3. **Lookalikes per segment.** For a chosen segment, run Flow 1 step 2 with that segment's top domains as `domain` seeds (up to 10) and its description as `icp_prompt`. Exclude the existing customers with an exclusion list built from the customer file (MCP `save-exclusion-list`, CLI `discolike queries create-exclusion-list`, SDK `client.queries.create_exclusion_list`) passed as `exclusion_query_id`; `exclude_domain` is for a handful of domains, capped at 100.
 4. **Validate and hand off** with Flow 1 steps 3 to 6. Name each segment as a campaign lane and write the label to the CRM with MCP `crm-writeback-segments`, so every account carries exactly one lane and sequences stay separate.
 
 ### Flow 5: market map to N
@@ -103,12 +103,12 @@ The user wants the whole addressable market, thousands of accounts, not a sample
 
 1. **Anchor.** Count with the structural filters alone (country, size, category). That number is the ceiling; if it is far from the user's own estimate, the filters are wrong, fix them before spending.
 2. **Calibrate on 50.** One inclusion-only pull, `max_records=50`, seeds plus `icp_prompt`, no negations. Validate fit. Then change one lever per round: first exclude the high-similarity wrong-category anchors, then add two or three confirmed fits as seeds, and only then add a phrase. Never negate a phrase the real targets also use. Excluding a domain: MCP `discover-similar-companies` with `negate_domain` (shapes the ranking), CLI `--param negate_domain=a.com,b.com`, SDK `exclude_domain` (hard filter only). Re-run at 200 and read ranks 1 to 10, 90 to 100, and 190 to 200; quality decays with rank, and the tail tells you where to stop.
-3. **Round.** Pull 500 to 1,000. Save as a query. Validate. Record fit rate.
-4. **Next round.** Same query, `exclusion_query_id` set to every saved round so far, two new seeds from the last round's best fits, `max_records` up to 1,000. Repeat.
+3. **Round.** Pull 500 to 1,000. Add every domain to the exclusion list. Validate. Record fit rate.
+4. **Next round.** Same query, `exclusion_query_id` pointing at the exclusion list, two new seeds from the last round's best fits, `max_records` up to 1,000. Repeat. One list per market map, grown each round, is simpler than one list per round.
 5. **Stop.** When a round's fit rate drops under about 30 percent, or net-new fits fall under 5 percent of the pull, the market is mapped. Push past that only with a different `icp_prompt` (an adjacent segment), not a bigger `max_records`.
 6. **Deliver.** Union the rounds, dedupe on bare domain, keep the round number and similarity on each row.
 
-A 70/20/10 split works for a portfolio: 70 percent of records from the proven prompt, 20 from an adjacent one, 10 from an experimental one, each its own saved query.
+A 70/20/10 split works for a portfolio: 70 percent of records from the proven prompt, 20 from an adjacent one, 10 from an experimental one, all sharing the one exclusion list.
 
 ### Flow 6: ICP from a website
 
