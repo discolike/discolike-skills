@@ -8,8 +8,8 @@
 </p>
 
 <p align="center">
-  <b>Official DiscoLike skills for coding agents</b><br>
-  Teach Claude Code, Codex, Cursor, and any skill-reading agent how to find companies, enrich them, and reach the right people.
+<b>Official DiscoLike skills for coding agents</b><br>
+One workflow for Claude Code, Codex, Cursor, Gemini CLI, Copilot, Windsurf, Grok, and agents that honor <code>AGENTS.md</code>.
 </p>
 
 <p align="center">
@@ -50,21 +50,28 @@ The skill activates automatically when a task involves finding companies, buildi
 
 ### Codex, Cursor, and other agents
 
-Any client that reads skill files can use it. Copy [`skills/discolike/SKILL.md`](skills/discolike/SKILL.md) into the location your client expects:
+Clone this repository into the project or install it as a plugin where the client supports plugins. Every adapter points back to the same canonical [`skills/discolike/SKILL.md`](skills/discolike/SKILL.md), so clients get the same safeguards and product knowledge without maintaining forks.
 
-| Client | Location |
-|---|---|
-| Codex | `~/.codex/skills/discolike/SKILL.md` |
-| Cursor | `.cursor/rules/discolike.mdc` |
-| Anything that reads `AGENTS.md` | Append the file contents to `AGENTS.md` |
+| Client | Included integration | How it activates |
+|---|---|---|
+| Claude Code | `.claude-plugin/` plus `CLAUDE.md` | Install from the Claude marketplace, or open the repo as a project. |
+| Codex | `.codex-plugin/plugin.json` plus `AGENTS.md` | Install the plugin from a marketplace that contains this repo, or open the repo; `AGENTS.md` routes matching work to the skill. |
+| Cursor | `.cursor/rules/discolike.mdc` | Open or copy the repository rule into a Cursor project. |
+| Gemini CLI | `GEMINI.md` | Open the repo or copy the file into a project. |
+| GitHub Copilot | `.github/copilot-instructions.md` | Open or copy the instruction file into a project. |
+| Windsurf | `.windsurf/rules/discolike.md` | Open or copy the repository rule into a Windsurf project. |
+| Grok | `.grok-plugin/plugin.json` plus `AGENTS.md` | Install the plugin where supported, or use the included project instruction file. |
+| Other agents | `AGENTS.md` | Use the included project instruction file, or add its two paragraphs to the agent's project instructions. |
 
-Or fetch it straight from GitHub:
+For a personal global Codex installation, fetch the canonical skill directly:
 
 ```bash
-mkdir -p ~/.codex/skills/discolike
+mkdir -p ~/.agents/skills/discolike
 curl -fsSL https://raw.githubusercontent.com/Discolike/discolike-skills/main/skills/discolike/SKILL.md \
-  -o ~/.codex/skills/discolike/SKILL.md
+  -o ~/.agents/skills/discolike/SKILL.md
 ```
+
+If a client does not support rules or skills, give it the contents of `AGENTS.md` as project instructions. The agent will then load the canonical skill only for relevant tasks instead of carrying the full workflow in every prompt.
 
 ## What the skill knows
 
