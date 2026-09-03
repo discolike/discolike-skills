@@ -1,28 +1,110 @@
-# DiscoLike skills
+<p align="center">
+  <a href="https://discolike.com">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://discolike.com/images/logo.svg">
+      <img src="https://discolike.com/images/logo-dark.svg" alt="DiscoLike" width="220">
+    </picture>
+  </a>
+</p>
 
-Skills that teach coding agents how to find companies, enrich them, and reach the right people with [DiscoLike](https://discolike.com), a search engine over 80M+ business websites.
+<p align="center">
+  <b>Official DiscoLike skills for coding agents</b><br>
+  Teach Claude Code, Codex, Cursor, and any skill-reading agent how to find companies, enrich them, and reach the right people.
+</p>
 
-## Install
+<p align="center">
+  <a href="https://github.com/Discolike/discolike-skills/blob/main/skills/discolike/SKILL.md"><img src="https://img.shields.io/badge/skill-discolike-3367f1" alt="Skill: discolike"></a>
+  <a href="https://github.com/Discolike/discolike-skills/blob/main/.claude-plugin/plugin.json"><img src="https://img.shields.io/badge/plugin-v0.1.0-3367f1" alt="Plugin version"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
+</p>
 
-Claude Code:
+<p align="center">
+  <a href="https://discolike.com">Website</a> ·
+  <a href="https://discolike.com/mcp/">MCP server</a> ·
+  <a href="https://docs.discolike.com">API Docs</a> ·
+  <a href="https://github.com/Discolike/discolike-python">Python SDK &amp; CLI</a> ·
+  <a href="https://discolike.com/signup">Sign up</a> ·
+  <a href="https://calendly.com/discolike/introductory-call">Book a demo</a>
+</p>
+
+---
+
+DiscoLike is a search engine over **80M+ business websites worldwide**, analyzed in **50 languages** — roughly **3x the coverage of LinkedIn-dependent databases**. It ranks companies by what they actually do on the web, so it reaches niche verticals, local businesses, and non-English markets that other B2B data sources miss.
+
+This repo ships one skill, [`skills/discolike/SKILL.md`](skills/discolike/SKILL.md), that gives a coding agent the operating knowledge to use DiscoLike well: which access mode to pick, how to open an account without a browser, how to search without wasting credits, and the end-to-end flows for the jobs people actually ask for — target account lists, lookalikes, CRM enrichment, ICP segmentation, and contact discovery.
+
+> **If you're a coding agent:** read [`SKILL.md`](skills/discolike/SKILL.md) directly — it is the whole product. The fastest integration is the hosted MCP server at `https://api.discolike.com/v1/mcp` (streamable-http, OAuth, 48 tools). For scripting use `pip install discolike`; for the terminal use `pip install discolike-cli` or `uvx --from discolike-cli discolike`. No account yet? `POST https://api.discolike.com/v1/public/signup` opens one from an email and name; the owner confirms by email. Machine-readable API index: `https://docs.discolike.com/llms.txt`.
+
+## Installation
+
+### Claude Code
+
+Add the marketplace once, then install the plugin:
 
 ```
 /plugin marketplace add Discolike/discolike-skills
 /plugin install discolike@discolike
 ```
 
-Codex, Cursor, or any agent that reads skill files: copy `skills/discolike/SKILL.md` into the skills directory your client uses (`~/.codex/skills/discolike/SKILL.md`, `.cursor/rules/discolike.mdc`, `AGENTS.md`).
+The skill activates automatically when a task involves finding companies, building a target or TAM list, lookalikes, ICP research, company enrichment, or decision-maker contacts.
+
+### Codex, Cursor, and other agents
+
+Any client that reads skill files can use it. Copy [`skills/discolike/SKILL.md`](skills/discolike/SKILL.md) into the location your client expects:
+
+| Client | Location |
+|---|---|
+| Codex | `~/.codex/skills/discolike/SKILL.md` |
+| Cursor | `.cursor/rules/discolike.mdc` |
+| Anything that reads `AGENTS.md` | Append the file contents to `AGENTS.md` |
+
+Or fetch it straight from GitHub:
+
+```bash
+mkdir -p ~/.codex/skills/discolike
+curl -fsSL https://raw.githubusercontent.com/Discolike/discolike-skills/main/skills/discolike/SKILL.md \
+  -o ~/.codex/skills/discolike/SKILL.md
+```
 
 ## What the skill knows
 
-- When DiscoLike is the right tool and which access mode to pick: MCP server, CLI, Python SDK, or REST.
-- How to open an account from the agent without a browser.
-- The three search modes (`icp_prompt`, seed `domain`s, `phrase_match`), the filters, and how to count before spending credits.
-- What to do after discovery: contacts, enrichment, segmentation, validation, CRM push.
+- **Which door to use.** MCP server for clients that support remote MCP, CLI when shelling out, Python SDK when writing a script, REST as a last resort — and when to ask the user before wiring any of them up.
+- **How to open an account from the agent.** One `POST` with an email and name, no browser, no credential returned; the owner confirms by email and picks a plan.
+- **How to search.** The three ways to describe a target on one `discover` call — a plain-English `icp_prompt`, up to 10 seed `domain`s for lookalikes, exact `phrase_match` fragments — plus the geo, size, revenue, tech-stack, category, language, and business-model filters, each with a `negate_` twin.
+- **How not to burn credits.** Count first (free), start with a small `max_records`, and page past the 10,000-per-call cap with exclusion lists rather than re-running the same search.
+- **What to do after discovery.** Contacts at matched companies, enrichment of lists you already have, segmenting a customer list into ICP clusters, validating a list against an ICP, and pushing results to HubSpot, Salesforce, or Pipedrive.
+- **How to diagnose bad results.** What to change when results look noisy, and when a question is a DiscoGen research job rather than a filter.
+
+## Flows
+
+Each flow in the skill lists the MCP tool, the CLI command, and the SDK call side by side, so the agent can execute it in whichever mode is connected.
+
+| Flow | What the agent does |
+|---|---|
+| Discover, verify, contacts, ContaGen | Build a target list, confirm fit, get named people, fill the gaps with live web research |
+| Enrich a CRM export | Append firmographics, tech stack, growth, and scores to a domain list |
+| Match company names to domains | Turn a messy name column into resolved domains, single or bulk |
+| Segment a client list into ICPs | Cluster existing customers, describe each cluster, run lookalikes per cluster |
+| Market map to N | Grow a list to a target size with exclusion-list paging |
+| ICP from a website | Derive a target profile from one URL and search on it |
+| Signal-qualified list | "Find X that run Shopify", "that are hiring SDRs", "that have a pricing page" — discover, then qualify on the signal |
+| Technology and infrastructure targeting | Find companies by the vendors and stack they run |
+| Rank or filter a list the user already has | Score an existing list against an ICP instead of discovering new companies |
 
 ## Related
 
-- MCP server: https://discolike.com/mcp/
-- API and SDK: https://discolike.com/api/
-- Python SDK and CLI source: https://github.com/Discolike/discolike-python
-- Docs: https://docs.discolike.com/
+- **MCP server**: [discolike.com/mcp](https://discolike.com/mcp/) — hosted, OAuth 2.1, install snippets for every major client
+- **Python SDK and CLI**: [github.com/Discolike/discolike-python](https://github.com/Discolike/discolike-python)
+- **API documentation**: [docs.discolike.com](https://docs.discolike.com)
+- **Agent signup guide**: [docs.discolike.com/guides/agent-signup](https://docs.discolike.com/guides/agent-signup/)
+
+## Support & contact
+
+- **Sign up**: [discolike.com/signup](https://discolike.com/signup)
+- **Book a demo**: [calendly.com/discolike/introductory-call](https://calendly.com/discolike/introductory-call)
+- **LinkedIn**: [linkedin.com/company/discolike](https://www.linkedin.com/company/discolike/)
+- **Issues with this skill**: [GitHub issues](https://github.com/Discolike/discolike-skills/issues)
+
+## License
+
+[MIT](LICENSE)
