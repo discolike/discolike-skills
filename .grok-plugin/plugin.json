@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "description": "Company discovery, enrichment, and contact research for Grok and other coding agents.",
   "homepage": "https://discolike.com/mcp/",
-  "skills": "../skills/",
-  "keywords": ["discolike", "b2b-data", "company-search", "contacts", "mcp"],
+  "keywords": ["discolike"],
   "category": "Productivity"
 }
