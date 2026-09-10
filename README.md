@@ -48,6 +48,14 @@ Add the marketplace once, then install the plugin:
 
 The skill activates automatically when a task involves finding companies, building a target or TAM list, lookalikes, ICP research, company enrichment, or decision-maker contacts.
 
+### Any agent with the `skills` CLI
+
+Works for Codex, Cursor, Gemini CLI, Copilot, Windsurf, OpenCode, and Claude Code alike:
+
+```
+npx skills add Discolike/discolike-skills
+```
+
 ### Codex, Cursor, and other agents
 
 Clone this repository into the project or install it as a plugin where the client supports plugins. Every adapter points back to the same canonical [`skills/discolike/SKILL.md`](skills/discolike/SKILL.md), so clients get the same safeguards and product knowledge without maintaining forks.
