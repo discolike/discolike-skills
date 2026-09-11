@@ -9,7 +9,7 @@
 
 <p align="center">
 <b>Official DiscoLike skills for coding agents</b><br>
-One workflow for Claude Code, Codex, Cursor, Gemini CLI, Copilot, Windsurf, Grok, and agents that honor <code>AGENTS.md</code>.
+The GTM search engine for the business web, one workflow for Claude Code, Codex, Cursor, Gemini CLI, Copilot, Windsurf, Grok, and agents that honor <code>AGENTS.md</code>.
 </p>
 
 <p align="center">

@@ -5,7 +5,7 @@ description: Use when the task involves finding companies, building a target acc
 
 # DiscoLike
 
-DiscoLike is a search engine over 80M+ crawled business websites. It returns companies ranked by what they actually do on the web, not by LinkedIn tags, so it reaches niche verticals and non-English markets other B2B databases miss. Every record carries firmographics; contacts, technographics, growth metrics, enrichment, segmentation, and CRM push are one more call away.
+DiscoLike is a search engine over 80M+ crawled business websites. It returns companies ranked by what they actually do on the web, not by LinkedIn tags, so it reaches niche verticals and non-English markets other B2B databases miss. Every domain is re-validated by SSL certificate about every 30 days, so results never contain dead or parked domains and none are billed. Every record carries firmographics; contacts, technographics, growth metrics, enrichment, segmentation, and CRM push are one more call away.
 
 Requires a paid plan from $99/month. There is no free tier. Counting results is free.
 
