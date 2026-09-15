@@ -22,8 +22,8 @@
 #     `uvx --from discolike-cli[==<version>] discolike`.
 #   * A `discolike` segment never auto-approves when its first subcommand is in
 #     GATED (credential and provider-key management), when any word starts
-#     with `/` or `~` or contains `..` (no writes or reads outside the working
-#     tree), or when a word has an unquoted glob, brace, or paren character.
+#     with `/` or `~` (also right after `=` in a `--flag=value` word) or
+#     contains `..` (no writes or reads outside the working tree), or when a word has an unquoted glob, brace, or paren character.
 #   * Other segments in a pipeline that contains `discolike` must be one of
 #     the read-only HELPERS, must not reference a path, and must not carry an
 #     output or input file flag. `echo` and `printf` are exempt from the path
@@ -135,7 +135,8 @@ verdict="$(printf '%s' "$stripped" | awk -v helpers="$HELPERS" -v gated="$GATED"
     sub_seen = 0
     for (j = start + 1; j <= n; j++) {
       if (unquoted_meta(raw[j])) return 0
-      if (tok[j] ~ /^[\/~]/ || index(tok[j], "..") > 0) return 0
+      # A path at the start of the word, or after `=` in a --flag=value word.
+      if (tok[j] ~ /(^|=)[\/~]/ || index(tok[j], "..") > 0) return 0
       # --base-url would send the credential to another host: never auto-approve.
       if (tok[j] == "--base-url" || tok[j] ~ /^--base-url=/) return 0
       if (tok[j] == "--api-key") { j++; continue }
