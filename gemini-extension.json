@@ -1,6 +1,6 @@
 {
   "name": "discolike",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Company discovery, enrichment, and contact search across 80M+ business websites via the DiscoLike MCP server.",
   "contextFileName": "GEMINI.md",
   "mcpServers": {

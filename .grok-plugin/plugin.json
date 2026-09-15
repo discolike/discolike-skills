@@ -1,8 +1,10 @@
 {
   "name": "discolike",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Company discovery, enrichment, and contact research for Grok and other coding agents.",
   "homepage": "https://discolike.com/mcp/",
-  "keywords": ["discolike"],
+  "keywords": [
+    "discolike"
+  ],
   "category": "Productivity"
 }

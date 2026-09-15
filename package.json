@@ -1,0 +1,13 @@
+{
+  "name": "@discolike/skills",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write \"**/*.md\"",
+    "format:check": "prettier --check \"**/*.md\"",
+    "test": "sh hooks/test-approve-cli.sh && sh hooks/test-launcher.sh"
+  },
+  "devDependencies": {
+    "prettier": "3.6.2"
+  }
+}
