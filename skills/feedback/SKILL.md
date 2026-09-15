@@ -17,10 +17,10 @@ Default to feedback when unsure.
 
 ## 2. Pick the repository
 
-| About | Repository |
-|---|---|
-| This plugin, hooks, skills text | `Discolike/discolike-skills` |
-| CLI or Python SDK | `Discolike/discolike-python` |
+| About                                  | Repository                                        |
+| -------------------------------------- | ------------------------------------------------- |
+| This plugin, hooks, skills text        | `Discolike/discolike-skills`                      |
+| CLI or Python SDK                      | `Discolike/discolike-python`                      |
 | MCP server, API, data quality, billing | `Discolike/discolike-skills` (the team routes it) |
 
 ## 3. Draft and confirm

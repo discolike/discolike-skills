@@ -12,11 +12,11 @@ Requires a paid plan from $99/month. There is no free tier. Counting results is 
 
 ## Files in this skill
 
-| File | Read it when |
-|------|--------------|
-| `flows.md` | Running any end-to-end job: target list, CRM enrichment, name-to-domain matching, ICP segmentation, market map, ICP from a website, signal qualification, tech-stack targeting, scoring an existing list. |
-| `troubleshooting.md` | Results look noisy, counts do not add up, or the user says "these are wrong". |
-| `discogen.md` | The question is research, not a filter ("do they sell to hospitals?", "estimated ad spend?"). |
+| File                 | Read it when                                                                                                                                                                                              |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `flows.md`           | Running any end-to-end job: target list, CRM enrichment, name-to-domain matching, ICP segmentation, market map, ICP from a website, signal qualification, tech-stack targeting, scoring an existing list. |
+| `troubleshooting.md` | Results look noisy, counts do not add up, or the user says "these are wrong".                                                                                                                             |
+| `discogen.md`        | The question is research, not a filter ("do they sell to hospitals?", "estimated ad spend?").                                                                                                             |
 
 Read a file when its row applies; do not load all three up front.
 
@@ -54,14 +54,14 @@ CLI equivalent: `discolike signup --email <work email> --first-name <first> --la
 
 Three ways to describe the target, all on the same `discover` call. Combine them.
 
-| Want | Parameter | Notes |
-|------|-----------|-------|
-| Plain-English ICP | `icp_prompt` | Extracts filters and seed domains from the sentence. Prefer over `icp_text`. |
-| Companies like these | `domain` (up to 10) | Ranked by similarity to what the seed companies do. |
-| Homepage says X | `phrase_match` (up to 20) | Exact text fragments. |
-| Narrow | `country`, `state`, `employee_range` ("51,500"), `revenue_range`, `tech_stack`, `category`, `language`, `business_model` | Every filter has a `negate_` twin. |
-| Size the set | `count` with the same filters | Free. Do this before a large `discover`. |
-| Cap spend | `max_records` | Start with 100 to 500 to check fit, then scale. |
+| Want                 | Parameter                                                                                                                | Notes                                                                        |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
+| Plain-English ICP    | `icp_prompt`                                                                                                             | Extracts filters and seed domains from the sentence. Prefer over `icp_text`. |
+| Companies like these | `domain` (up to 10)                                                                                                      | Ranked by similarity to what the seed companies do.                          |
+| Homepage says X      | `phrase_match` (up to 20)                                                                                                | Exact text fragments.                                                        |
+| Narrow               | `country`, `state`, `employee_range` ("51,500"), `revenue_range`, `tech_stack`, `category`, `language`, `business_model` | Every filter has a `negate_` twin.                                           |
+| Size the set         | `count` with the same filters                                                                                            | Free. Do this before a large `discover`.                                     |
+| Cap spend            | `max_records`                                                                                                            | Start with 100 to 500 to check fit, then scale.                              |
 
 Each search bills a query fee plus a fee per 1,000 new records. Records seen in the last 90 days are free. Results cap at 10,000 per call; for more, put what you have into an exclusion list and run the next call with `exclusion_query_id`. Exclusion lists hold up to 250,000 domains and 500,000 contacts on every plan.
 

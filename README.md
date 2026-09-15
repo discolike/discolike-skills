@@ -60,16 +60,16 @@ npx skills add Discolike/discolike-skills
 
 Clone this repository into the project or install it as a plugin where the client supports plugins. Every adapter points back to the same canonical [`skills/discolike/SKILL.md`](skills/discolike/SKILL.md), so clients get the same safeguards and product knowledge without maintaining forks.
 
-| Client | Included integration | How it activates |
-|---|---|---|
-| Claude Code | `.claude-plugin/` plus `CLAUDE.md` | Install from the Claude marketplace, or open the repo as a project. |
-| Codex | `.codex-plugin/plugin.json` plus `AGENTS.md` | Install the plugin from a marketplace that contains this repo, or open the repo; `AGENTS.md` routes matching work to the skill. |
-| Cursor | `.cursor-plugin/plugin.json` plus `.cursor/rules/discolike.mdc` | Install from the Cursor Marketplace, or open or copy the repository rule into a Cursor project. |
-| Gemini CLI | `gemini-extension.json` plus `GEMINI.md` | `gemini extensions install https://github.com/Discolike/discolike-skills`, or open the repo or copy the file into a project. |
-| GitHub Copilot | `.github/copilot-instructions.md` | Open or copy the instruction file into a project. |
-| Windsurf | `.windsurf/rules/discolike.md` | Open or copy the repository rule into a Windsurf project. |
-| Grok | `.grok-plugin/plugin.json` plus `AGENTS.md` | Install the plugin where supported, or use the included project instruction file. |
-| Other agents | `AGENTS.md` | Use the included project instruction file, or add its two paragraphs to the agent's project instructions. |
+| Client         | Included integration                                            | How it activates                                                                                                                |
+| -------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Claude Code    | `.claude-plugin/` plus `CLAUDE.md`                              | Install from the Claude marketplace, or open the repo as a project.                                                             |
+| Codex          | `.codex-plugin/plugin.json` plus `AGENTS.md`                    | Install the plugin from a marketplace that contains this repo, or open the repo; `AGENTS.md` routes matching work to the skill. |
+| Cursor         | `.cursor-plugin/plugin.json` plus `.cursor/rules/discolike.mdc` | Install from the Cursor Marketplace, or open or copy the repository rule into a Cursor project.                                 |
+| Gemini CLI     | `gemini-extension.json` plus `GEMINI.md`                        | `gemini extensions install https://github.com/Discolike/discolike-skills`, or open the repo or copy the file into a project.    |
+| GitHub Copilot | `.github/copilot-instructions.md`                               | Open or copy the instruction file into a project.                                                                               |
+| Windsurf       | `.windsurf/rules/discolike.md`                                  | Open or copy the repository rule into a Windsurf project.                                                                       |
+| Grok           | `.grok-plugin/plugin.json` plus `AGENTS.md`                     | Install the plugin where supported, or use the included project instruction file.                                               |
+| Other agents   | `AGENTS.md`                                                     | Use the included project instruction file, or add its two paragraphs to the agent's project instructions.                       |
 
 For a personal global Codex installation, fetch the canonical skill directly:
 
@@ -83,13 +83,13 @@ If a client does not support rules or skills, give it the contents of `AGENTS.md
 
 ## What the plugin bundles
 
-| Piece | Purpose |
-|---|---|
-| `skills/discolike/` | Entry-point skill plus `flows.md`, `troubleshooting.md`, `discogen.md`, loaded on demand |
-| `skills/setup/`, `skills/update/`, `skills/feedback/` | Connect, upgrade, and report |
-| `bin/discolike` | Launcher that runs `discolike-cli` at the version pinned in `bin/cli-version` through `uvx` |
-| `hooks/approve-cli.sh` | Auto-approves plain `discolike` commands; credential and provider-key subcommands, redirects, `&&`, `$(…)`, and paths outside the working tree still prompt |
-| `hooks/approve-skills.sh` | Auto-approves this plugin's own skills and read-only web tools in Claude Code |
+| Piece                                                 | Purpose                                                                                                                                                     |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `skills/discolike/`                                   | Entry-point skill plus `flows.md`, `troubleshooting.md`, `discogen.md`, loaded on demand                                                                    |
+| `skills/setup/`, `skills/update/`, `skills/feedback/` | Connect, upgrade, and report                                                                                                                                |
+| `bin/discolike`                                       | Launcher that runs `discolike-cli` at the version pinned in `bin/cli-version` through `uvx`                                                                 |
+| `hooks/approve-cli.sh`                                | Auto-approves plain `discolike` commands; credential and provider-key subcommands, redirects, `&&`, `$(…)`, and paths outside the working tree still prompt |
+| `hooks/approve-skills.sh`                             | Auto-approves this plugin's own skills and read-only web tools in Claude Code                                                                               |
 
 Run the hook tests with `sh hooks/test-approve-cli.sh`.
 
@@ -106,17 +106,17 @@ Run the hook tests with `sh hooks/test-approve-cli.sh`.
 
 Each flow in the skill lists the MCP tool, the CLI command, and the SDK call side by side, so the agent can execute it in whichever mode is connected.
 
-| Flow | What the agent does |
-|---|---|
-| Discover, verify, contacts, ContaGen | Build a target list, confirm fit, get named people, fill the gaps with live web research |
-| Enrich a CRM export | Append firmographics, tech stack, growth, and scores to a domain list |
-| Match company names to domains | Turn a messy name column into resolved domains, single or bulk |
-| Segment a client list into ICPs | Cluster existing customers, describe each cluster, run lookalikes per cluster |
-| Market map to N | Grow a list to a target size with exclusion-list paging |
-| ICP from a website | Derive a target profile from one URL and search on it |
-| Signal-qualified list | "Find X that run Shopify", "that are hiring SDRs", "that have a pricing page" — discover, then qualify on the signal |
-| Technology and infrastructure targeting | Find companies by the vendors and stack they run |
-| Rank or filter a list the user already has | Score an existing list against an ICP instead of discovering new companies |
+| Flow                                       | What the agent does                                                                                                  |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| Discover, verify, contacts, ContaGen       | Build a target list, confirm fit, get named people, fill the gaps with live web research                             |
+| Enrich a CRM export                        | Append firmographics, tech stack, growth, and scores to a domain list                                                |
+| Match company names to domains             | Turn a messy name column into resolved domains, single or bulk                                                       |
+| Segment a client list into ICPs            | Cluster existing customers, describe each cluster, run lookalikes per cluster                                        |
+| Market map to N                            | Grow a list to a target size with exclusion-list paging                                                              |
+| ICP from a website                         | Derive a target profile from one URL and search on it                                                                |
+| Signal-qualified list                      | "Find X that run Shopify", "that are hiring SDRs", "that have a pricing page" — discover, then qualify on the signal |
+| Technology and infrastructure targeting    | Find companies by the vendors and stack they run                                                                     |
+| Rank or filter a list the user already has | Score an existing list against an ICP instead of discovering new companies                                           |
 
 ## Related
 
