@@ -31,7 +31,7 @@ The GTM search engine for the business web, one workflow for Claude Code, Codex,
 
 DiscoLike is a search engine over **80M+ business websites worldwide**, analyzed in **50 languages** — roughly **3x the coverage of LinkedIn-dependent databases**. It ranks companies by what they actually do on the web, so it reaches niche verticals, local businesses, and non-English markets that other B2B data sources miss.
 
-This repo ships one skill, [`skills/discolike/SKILL.md`](skills/discolike/SKILL.md), that gives a coding agent the operating knowledge to use DiscoLike well: which access mode to pick, how to open an account without a browser, how to search without wasting credits, and the end-to-end flows for the jobs people actually ask for — target account lists, lookalikes, CRM enrichment, ICP segmentation, and contact discovery.
+This repo ships the `discolike` plugin: the [`discolike`](skills/discolike/SKILL.md) skill with its flow, troubleshooting, and DiscoGen references, `setup`, `update`, and `feedback` skills, a pinned `discolike` CLI launcher, and approval hooks so plain CLI calls run without a permission prompt in Claude Code, Cursor, and Codex. The main skill gives a coding agent the operating knowledge to use DiscoLike well: which access mode to pick, how to open an account without a browser, how to search without wasting credits, and the end-to-end flows for the jobs people actually ask for — target account lists, lookalikes, CRM enrichment, ICP segmentation, and contact discovery.
 
 > **If you're a coding agent:** read [`SKILL.md`](skills/discolike/SKILL.md) directly — it is the whole product. The fastest integration is the hosted MCP server at `https://api.discolike.com/v1/mcp` (streamable-http, OAuth, 48 tools). For scripting use `pip install discolike`; for the terminal use `pip install discolike-cli` or `uvx --from discolike-cli discolike`. No account yet? `POST https://api.discolike.com/v1/public/signup` opens one from an email and name; the owner confirms by email. Machine-readable API index: `https://docs.discolike.com/llms.txt`.
 
@@ -80,6 +80,18 @@ curl -fsSL https://raw.githubusercontent.com/Discolike/discolike-skills/main/ski
 ```
 
 If a client does not support rules or skills, give it the contents of `AGENTS.md` as project instructions. The agent will then load the canonical skill only for relevant tasks instead of carrying the full workflow in every prompt.
+
+## What the plugin bundles
+
+| Piece | Purpose |
+|---|---|
+| `skills/discolike/` | Entry-point skill plus `flows.md`, `troubleshooting.md`, `discogen.md`, loaded on demand |
+| `skills/setup/`, `skills/update/`, `skills/feedback/` | Connect, upgrade, and report |
+| `bin/discolike` | Launcher that runs `discolike-cli` at the version pinned in `bin/cli-version` through `uvx` |
+| `hooks/approve-cli.sh` | Auto-approves plain `discolike` commands; credential and provider-key subcommands, redirects, `&&`, `$(…)`, and paths outside the working tree still prompt |
+| `hooks/approve-skills.sh` | Auto-approves this plugin's own skills and read-only web tools in Claude Code |
+
+Run the hook tests with `sh hooks/test-approve-cli.sh`.
 
 ## What the skill knows
 

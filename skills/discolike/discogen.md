@@ -1,0 +1,15 @@
+# DiscoGen, when a question is not a filter
+
+"Do they sell to hospitals?", "Is pricing public?", "Estimated monthly ad spend?" are research prompts, not filters. MCP `run-discogen` on a domain list with `web_search=true`, one call for the whole list, never one call per domain and never split across parallel tasks: all tasks share the user's provider key and rate-limit each other. CLI `discolike discogen ...`. SDK `client.discogen.process(DiscoGenProcessRequest(query=..., domains=[...], web_search=True))` then `job.wait()`. Runs on the user's own LLM and search keys; DiscoLike bills a submit fee plus net-new records, and records from the last 90 days are cached, so a rerun costs the submit fee.
+
+Rules that decide whether the column is usable:
+
+- **Narrow first.** DiscoGen hit rate is set by its input. Do all the filtering Discover can do (`phrase_match` "case study", `tech_stack`, category, geo) before dispatching; a tight list beats validating a noisy one after.
+- **Preview on known answers.** Dry-run the prompt on 20 to 50 domains where the user already knows the truth, fix the prompt, then run the list.
+- **Numbered questions become columns.** "1. Is the industry classification accurate, yes or no. 2. Do they have US engineers." returns two columns in one pass. Keep it to a few; eight questions at once degrade all of them.
+- **Two passes, two models.** Pass 1: extraction-only questions on the full list with a cheap model. Filter on that column. Pass 2: the reasoning question on the survivors with a strong model. Same or lower cost, better accuracy.
+- **Yes/no prompts.** Ask for `answer` yes/no/unknown, `evidence` as a short quote, `confidence` 0 to 1. Treat unknown as abstain, never as no. Do not list example nouns ("YES examples: drums, pallets"); models match the nouns instead of the criterion. Do not put conflicting criteria in one prompt.
+- **Estimates.** Traffic, ad spend, headcount growth: the number is rarely public. Conservative models return "not available" on most rows. Use a Google model, ask for a range and an above/below threshold, and label the output directional.
+- **Search provider over native web search.** A dedicated search provider (Serper and the other BYOS options) returns compact snippets and a fixed per-search price. The model's built-in search at high context pulls unpredictable page content and can run several times the estimate. Never pick an OpenAI `-search-preview` model; those search on every call regardless of the toggle. Lower search depth before raising the model tier.
+- **ContaGen is extraction.** Names and titles out of search results. Use the latest Haiku or a GPT mini class model; a reasoning model costs several times more for the same triples. It searches the open web, it does not crawl a site's team page on demand. Niche titles (head of procurement, logistics manager) have low fill rates because they are sparse online; that is data availability, not a failed run.
+- **Model reasoning is non-deterministic.** Borderline rows flip between runs and between models. Report the yes count with the model name attached.
