@@ -14,7 +14,7 @@ The GTM search engine for the business web, one workflow for Claude Code, Codex,
 
 <p align="center">
   <a href="https://github.com/Discolike/discolike-skills/blob/main/skills/discolike/SKILL.md"><img src="https://img.shields.io/badge/skill-discolike-3367f1" alt="Skill: discolike"></a>
-  <a href="https://github.com/Discolike/discolike-skills/blob/main/.claude-plugin/plugin.json"><img src="https://img.shields.io/badge/plugin-v0.1.0-3367f1" alt="Plugin version"></a>
+  <a href="https://github.com/Discolike/discolike-skills/blob/main/.claude-plugin/plugin.json"><img src="https://img.shields.io/badge/plugin-v1.0.0-3367f1" alt="Plugin version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
 </p>
 

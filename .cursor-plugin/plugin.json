@@ -1,13 +1,24 @@
 {
   "name": "discolike",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Company search for agents: find target accounts, firmographics, technographics, and contacts across 80M+ business websites via the DiscoLike MCP server, CLI, or Python SDK.",
-  "author": { "name": "DiscoLike", "email": "support@discolike.com", "url": "https://discolike.com" },
+  "author": {
+    "name": "DiscoLike",
+    "email": "support@discolike.com",
+    "url": "https://discolike.com"
+  },
   "homepage": "https://discolike.com/mcp/",
   "repository": "https://github.com/Discolike/discolike-skills",
   "license": "MIT",
-  "keywords": ["discolike", "b2b-data", "company-search", "sales-intelligence", "gtm"],
+  "keywords": [
+    "discolike",
+    "b2b-data",
+    "company-search",
+    "sales-intelligence",
+    "gtm"
+  ],
   "logo": "assets/discolike-icon.png",
   "skills": "skills",
-  "mcpServers": ".mcp.json"
+  "mcpServers": ".mcp.json",
+  "hooks": "./hooks/cursor-hooks.json"
 }
