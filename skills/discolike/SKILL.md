@@ -17,6 +17,7 @@ Requires a paid plan from $99/month. There is no free tier. Counting results is 
 | `flows.md`           | Running any end-to-end job: target list, CRM enrichment, name-to-domain matching, ICP segmentation, market map, ICP from a website, signal qualification, tech-stack targeting, scoring an existing list. |
 | `troubleshooting.md` | Results look noisy, counts do not add up, or the user says "these are wrong".                                                                                                                             |
 | `discogen.md`        | The question is research, not a filter ("do they sell to hospitals?", "estimated ad spend?").                                                                                                             |
+| `flows.md` Flow 10   | The user wants everything that matches, tens of thousands of companies or 100,000+ contacts, or asks to replicate an app search over the API.                                                             |
 
 Read a file when its row applies; do not load all three up front.
 
@@ -63,13 +64,13 @@ Three ways to describe the target, all on the same `discover` call. Combine them
 | Size the set         | `count` with the same filters                                                                                            | Free. Do this before a large `discover`.                                     |
 | Cap spend            | `max_records`                                                                                                            | Start with 100 to 500 to check fit, then scale.                              |
 
-Each search bills a query fee plus a fee per 1,000 new records. Records seen in the last 90 days are free. Results cap at 10,000 per call; for more, put what you have into an exclusion list and run the next call with `exclusion_query_id`. Exclusion lists hold up to 250,000 domains and 500,000 contacts on every plan.
+Each search bills a query fee plus a fee per 1,000 new records. Records seen in the last 90 days are free. Results cap at 10,000 per call: 10,000 is a page size, not a total. For more, put what you have into an exclusion list and run the next call with `exclusion_query_id`, and keep turning pages until the results run dry (`flows.md` Flow 10). Exclusion lists hold up to 250,000 domains and 500,000 contacts on every plan. `max_records` has a floor of 20. Contacts pulled per domain list have no 10,000 ceiling; page them by slicing the domain list, since `offset` is ignored when `results_by_company` is set.
 
 Always set `variance` explicitly on API, CLI, and SDK calls (`MEDIUM` is the app default; the API default `UNRESTRICTED` turns the industry-drift guard off).
 
 ## After discovery
 
-- Contacts at the matched companies: contacts search with a persona description, seniority, or department. Returns verified email, phone, LinkedIn.
+- Contacts at the matched companies: contacts search with a persona description, seniority, or department. Returns email, phone, LinkedIn. Emails are pattern-derived unless `email_validated` is set, which keeps only addresses we have verified.
 - Enrich a list you already have: bizdata, vendors, growth, score, redirects, subsidiaries per domain, or bulk append from CSV.
 - Segment a customer list into ICP clusters with descriptions, then run lookalikes per cluster.
 - Validate a list against an ICP description: fit yes/no with a confidence level and reasoning per domain.
