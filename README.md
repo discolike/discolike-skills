@@ -91,7 +91,7 @@ If a client does not support rules or skills, give it the contents of `AGENTS.md
 | `hooks/approve-cli.sh`                                | Auto-approves plain `discolike` commands; credential and provider-key subcommands, redirects, `&&`, `$(…)`, and paths outside the working tree still prompt |
 | `hooks/approve-skills.sh`                             | Auto-approves this plugin's own skills and read-only web tools in Claude Code                                                                               |
 
-Run the hook tests with `sh hooks/test-approve-cli.sh`.
+Run the hook and launcher tests with `npm test` (or `sh hooks/test-approve-cli.sh` and `sh hooks/test-launcher.sh`).
 
 ## What the skill knows
 

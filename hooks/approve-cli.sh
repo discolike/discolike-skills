@@ -26,8 +26,10 @@
 #     contains `..` (no writes or reads outside the working tree), or when a word has an unquoted glob, brace, or paren character.
 #   * Other segments in a pipeline that contains `discolike` must be one of
 #     the read-only HELPERS, must not reference a path, and must not carry an
-#     output or input file flag. `echo` and `printf` are exempt from the path
-#     rule (a `/` in their argument is data).
+#     output or input file flag, and may take only the positional operands
+#     they need to transform stdin (jq and grep one, tr two, the rest none),
+#     so `cat secrets.txt` has nowhere to name a file. `echo` and `printf` are
+#     exempt from the path rule (a `/` in their argument is data).
 #   * A `;` clause with no `discolike` may only be `echo` or `printf`.
 #   * A leading `NAME=value` on any segment is refused.
 
@@ -74,6 +76,7 @@ verdict="$(printf '%s' "$stripped" | awk -v helpers="$HELPERS" -v gated="$GATED"
     n = split(helpers, a, " "); for (i = 1; i <= n; i++) HELPER[a[i]] = 1
     n = split(gated, a, " ");   for (i = 1; i <= n; i++) GATE[a[i]] = 1
     SQ = sprintf("%c", 39); DQ = "\""
+    init_helper_tables()
   }
 
   # Split s on an unquoted delimiter character. Fills out[1..k], returns k.
@@ -146,24 +149,63 @@ verdict="$(printf '%s' "$stripped" | awk -v helpers="$HELPERS" -v gated="$GATED"
     return 1
   }
 
-  function check_helper(tok, raw, n, in_pipe,    j) {
+  # Per-helper flag tables. VAL: short/long flags that consume the next word
+  # (jq --arg and --argjson consume two). BAD: flags that name a file.
+  function init_helper_tables() {
+    VAL["head"] = " n c ";           VAL["tail"] = " n c ";
+    VAL["cut"] = " d f c b ";        VAL["sort"] = " k t ";
+    VAL["grep"] = " e m A B C ";     VAL["uniq"] = " f s w ";
+    VAL["column"] = " s c ";         VAL["jq"] = " arg argjson indent ";
+    VAL["tr"] = " ";  VAL["wc"] = " ";  VAL["cat"] = " ";
+    BAD["sort"] = " o ";  BAD["grep"] = " f ";  BAD["jq"] = " f rawfile slurpfile argfile from-file ";
+    MAXPOS["jq"] = 1; MAXPOS["grep"] = 1; MAXPOS["tr"] = 2
+  }
+
+  function check_helper(tok, raw, n, in_pipe,    j, h, name, positional, skip, maxpos) {
     if (n < 1) return 0
-    if (in_pipe) { if (!(tok[1] in HELPER)) return 0 }
-    else if (tok[1] != "echo" && tok[1] != "printf") return 0
+    h = tok[1]
+    if (in_pipe) { if (!(h in HELPER)) return 0 }
+    else if (h != "echo" && h != "printf") return 0
     for (j = 1; j <= n; j++) if (unquoted_meta(raw[j])) return 0
-    if (tok[1] == "echo" || tok[1] == "printf") return 1
+    if (h == "echo" || h == "printf") return 1
     positional = 0
+    maxpos = (h in MAXPOS) ? MAXPOS[h] : 0
     for (j = 2; j <= n; j++) {
+      # Values and operands alike: never a path, never a home reference.
       if (index(tok[j], "/") > 0 || index(tok[j], "~") > 0) return 0
-      if (tok[j] ~ /^--(output|file|input|rawfile|slurpfile|argfile|from-file)(=|$)/) return 0
-      if (tok[j] ~ /^-[A-Za-z]*[ofi]/) return 0
-      if (substr(tok[j], 1, 1) != "-") {
-        positional++
-        # jq: one positional (the filter); a second is a file to read.
-        if (tok[1] == "jq" && positional > 1) return 0
-        # other helpers: a dotfile positional is a cwd read (.env).
-        if (tok[1] != "jq" && substr(tok[j], 1, 1) == ".") return 0
+      if (tok[j] ~ /^--(output|file|input)(=|$)/) return 0
+      if (substr(tok[j], 1, 1) == "-" && length(tok[j]) > 1) {
+        name = tok[j]; sub(/^--?/, "", name); sub(/=.*/, "", name)
+        if (substr(tok[j], 1, 2) != "--") {
+          # short cluster: every letter is a flag; the last may take a value
+          if (name !~ /^[A-Za-z]+$/) {
+            # attached value like -n20 or -d, : flag is the first letter
+            name = substr(name, 1, 1)
+            if (index(BAD[h], " " name " ") > 0) return 0
+            continue
+          }
+          for (k = 1; k <= length(name); k++) if (index(BAD[h], " " substr(name, k, 1) " ") > 0) return 0
+          name = substr(name, length(name), 1)
+        } else {
+          if (index(BAD[h], " " name " ") > 0) return 0
+          if (index(tok[j], "=") > 0) continue
+        }
+        if (index(VAL[h], " " name " ") > 0) {
+          # grep -e supplies the pattern, so any operand left is a file.
+          if (h == "grep" && name == "e") maxpos = 0
+          skip = (h == "jq" && (name == "arg" || name == "argjson")) ? 2 : 1
+          for (k = 1; k <= skip && j < n; k++) {
+            j++
+            if (index(tok[j], "/") > 0 || index(tok[j], "~") > 0) return 0
+          }
+        }
+        continue
       }
+      # Positional operands are where file names go. Each helper gets only the
+      # operands it needs to transform stdin (jq and grep one, tr two, the
+      # rest none), so `cat secrets.txt` has nowhere to name a file.
+      positional++
+      if (positional > maxpos) return 0
     }
     return 1
   }
