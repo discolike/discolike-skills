@@ -158,6 +158,14 @@ verdict="$(printf '%s' "$stripped" | awk -v helpers="$HELPERS" -v gated="$GATED"
     VAL["column"] = " s c ";         VAL["jq"] = " arg argjson indent ";
     VAL["tr"] = " ";  VAL["wc"] = " ";  VAL["cat"] = " ";
     BAD["sort"] = " o ";  BAD["grep"] = " f ";  BAD["jq"] = " f rawfile slurpfile argfile from-file ";
+    # Long options a helper may carry. Anything else (--files0-from=,
+    # --output=, --file=, GNU extensions that name files) falls to the prompt.
+    LONGOK["jq"] = " arg argjson indent tab raw-output compact-output sort-keys slurp null-input exit-status ascii-output join-output monochrome-output ";
+    LONGOK["grep"] = " line-buffered ignore-case invert-match count only-matching extended-regexp fixed-strings perl-regexp ";
+    LONGOK["sort"] = " reverse numeric-sort unique ignore-case stable ";
+    LONGOK["uniq"] = " count repeated unique ignore-case ";
+    LONGOK["head"] = " "; LONGOK["tail"] = " "; LONGOK["cat"] = " "; LONGOK["wc"] = " lines words chars bytes ";
+    LONGOK["tr"] = " delete squeeze-repeats complement "; LONGOK["cut"] = " "; LONGOK["column"] = " table ";
     MAXPOS["jq"] = 1; MAXPOS["grep"] = 1; MAXPOS["tr"] = 2
   }
 
@@ -188,6 +196,7 @@ verdict="$(printf '%s' "$stripped" | awk -v helpers="$HELPERS" -v gated="$GATED"
           name = substr(name, length(name), 1)
         } else {
           if (index(BAD[h], " " name " ") > 0) return 0
+          if (index(LONGOK[h], " " name " ") == 0) return 0
           if (index(tok[j], "=") > 0) continue
         }
         if (index(VAL[h], " " name " ") > 0) {
