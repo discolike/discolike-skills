@@ -72,7 +72,7 @@ Always set `variance` explicitly on API, CLI, and SDK calls (`MEDIUM` is the app
 - Contacts at the matched companies: contacts search with a persona description, seniority, or department. Returns verified email, phone, LinkedIn.
 - Enrich a list you already have: bizdata, vendors, growth, score, redirects, subsidiaries per domain, or bulk append from CSV.
 - Segment a customer list into ICP clusters with descriptions, then run lookalikes per cluster.
-- Validate a list against an ICP description for fit yes/partial/no with reasoning.
+- Validate a list against an ICP description: fit yes/no with a confidence level and reasoning per domain.
 - Push to HubSpot, Salesforce, Pipedrive via the CRM tools.
 
 Every one of these is a numbered flow in `flows.md`. Async steps return a job; wait on it before the next step. Save intermediate result sets as queries so later steps reference an id instead of re-sending domains.
