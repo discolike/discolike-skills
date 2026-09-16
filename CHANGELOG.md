@@ -1,10 +1,8 @@
 # Changelog
 
-## Unreleased
-
-- Flow 10 runs on `discolike bulk companies|estimate|contacts` (checkpoint and resume, local validation, one call in flight) instead of an SDK script, and forms go in as `--params-file form.json`. Flows 1, 5, and 9 use `--domains-file` for lists. Needs `discolike-cli` 0.3.3; bump `bin/cli-version` when it ships.
-
 ## 1.0.0 - 2026-09-15
+
+- Flow 10 runs on `discolike bulk companies|estimate|contacts` (checkpoint and resume, local validation, one call in flight) instead of an SDK script, and forms go in as `--params-file form.json`. Flows 1, 5, and 9 use `--domains-file` for lists. Needs `discolike-cli` 0.4.0, pinned in `bin/cli-version`.
 
 - Approval hooks: plain `discolike` CLI calls auto-approve in Claude Code, Cursor, and Codex. `auth`, `signup`, `llm-providers`, `search-providers`, `--base-url`, redirects, chaining, substitution, and out-of-tree paths still prompt. Read-only pipe helpers may take only the operands they need (jq and grep one, tr two, the rest none), so a bare file name has nowhere to go. Test table in `hooks/test-approve-cli.sh`; launcher tests in `hooks/test-launcher.sh`.
 - Skill auto-approval for this plugin's skills plus WebFetch and WebSearch.
