@@ -37,11 +37,11 @@ Three ways to describe the target, all on the same `discover` call. Combine them
 
 | Want | Parameter | Notes |
 |------|-----------|-------|
-| Plain-English ICP | `icp_prompt` | Extracts filters and seed domains from the sentence. Prefer over `icp_text`. |
-| Companies like these | `domain` (up to 10) | Ranked by similarity to what the seed companies do. |
-| Homepage says X | `phrase_match` (up to 20) | Exact text fragments. |
+| Plain-English ICP | `icp_prompt` | Extracts filters and seed domains from the sentence. This is how an ICP is described on `discover`. |
+| Companies like these | `domain` (up to 10) | Ranked by similarity to what the seed companies do. Confirm each one with `extract-website-text` before the first pull; a guessed domain that resolves to the wrong business drags the whole ranking with it. |
+| Homepage says X | `phrase_match` (up to 20) | Exact text fragments, OR by default: every phrase added widens the set. Prefix with `+` to require one. |
 | Narrow | `country`, `state`, `employee_range` ("51,500"), `revenue_range`, `tech_stack`, `category`, `language`, `business_model` | Every filter has a `negate_` twin. |
-| Size the set | `count` with the same filters | Free. Do this before a large `discover`. |
+| Size the set | `count` with the same filters | Free. Do this before a large `discover`. It sizes the hard market definition, not the lookalike ranking: it takes no seed `domain` and no ICP description, and defaults `exclude_leadgen` to false where `discover` defaults it to true, so it reads higher than the pull that follows. Pass `exclude_leadgen=true` to compare like with like. |
 | Cap spend | `max_records` | Start with 100 to 500 to check fit, then scale. |
 
 Each search bills a query fee plus a fee per 1,000 new records. Records seen in the last 90 days are free. Results cap at 10,000 per call; for more, put what you have into an exclusion list and run the next call with `exclusion_query_id`. Exclusion lists hold up to 250,000 domains and 500,000 contacts on every plan.
@@ -115,7 +115,7 @@ A 70/20/10 split works for a portfolio: 70 percent of records from the proven pr
 New account, no ICP written down, or "set up my ICP".
 
 1. **Read the source.** MCP `extract-website-text` on the user's own domain, or on their best customer's. CLI `discolike extract https://example.com --format json`. SDK `client.companies.extract(CompaniesExtractParams(domain="example.com"))`.
-2. **Draft.** From the text write one `icp_prompt` sentence, two or three `phrase_match` candidates that a target's homepage would say, a `category`, and the filters that are truly hard (country, business model). Split hard filters from preferences: if the user would still contact a company without it, it is a preference, so leave it out of the filter and let ranking handle it.
+2. **Draft.** From the text write one `icp_prompt` sentence, two or three `phrase_match` candidates, a `category`, and the filters that are truly hard (country, business model). A candidate phrase has to distinguish the target, not merely appear on its site: if it would be strange for a company printing that phrase prominently *not* to be in the ICP, keep it, otherwise drop it. Split hard filters from preferences: if the user would still contact a company without it, it is a preference, so leave it out of the filter and let ranking handle it. Target geography is a filter the user sets, not something to infer from where the seed customers happen to be based.
 3. **Count each phrase** on its own. A phrase that counts in the hundreds is a filter; one in the tens is a seed list; one in the hundreds of thousands is noise.
 4. **Sample 25.** Show domains and one-line descriptions. Ask the user to mark fits and misses in place.
 5. **Correct and save.** Adjust from the marks, re-sample once, then save the query with a name and tags. Every later flow starts from that id.
@@ -156,7 +156,7 @@ New account, no ICP written down, or "set up my ICP".
 
 Work top to bottom; the first fix usually ends it. Adding more exclusion language is almost never the answer.
 
-1. **Negations inside the ICP text.** "Does not sell apparel, candles, supplements" in `icp_prompt` or `icp_text` pulls results toward those words; the text is matched on meaning, not read as rules. Strip every negative clause; describe only what the ideal company is.
+1. **Negations inside the ICP text.** "Does not sell apparel, candles, supplements" in `icp_prompt` pulls results toward those words; the text is matched on meaning, not read as rules. Strip every negative clause; describe only what the ideal company is.
 2. **A positive category too broad.** E-Commerce admits every DTC brand. Pick the narrowest positive category that still contains the targets before touching any negation.
 3. **Seeds that bridge into the noise.** Seeds are the strongest signal in the search. Read each seed with `extract-website-text`: a fitness wearable site reads as running and wellness, so sportswear follows. Do not mix sub-verticals in one search; run them separately, net-new billing makes the split free for repeats.
 4. **A seed that is the wrong company.** Guessed domains resolve to the wrong business. Confirm each seed with `extract-website-text` before the first pull.
