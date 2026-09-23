@@ -49,7 +49,7 @@ Content-Type: application/json
 {"email": "<work email>", "first_name": "<first>", "last_name": "<last>", "agent": "<your name>"}
 ```
 
-CLI equivalent: `discolike signup --email <work email> --first-name <first> --last-name <last>`. Ask the user for any value you do not know. Relay the `next_step` text from the response. Free-mail and disposable domains are rejected. `409` means the account exists, send the user to log in. Guide: https://docs.discolike.com/guides/agent-signup/
+CLI equivalent: `discolike signup --email 'jane@acme.com' --first-name 'Jane' --last-name 'Doe'`, every value single-quoted (double quotes for a name with an apostrophe). Ask the user for any value you do not know. Relay the `next_step` text from the response. Free-mail and disposable domains are rejected. `409` means the account exists, send the user to log in. Guide: https://docs.discolike.com/guides/agent-signup/
 
 ## How to search
 

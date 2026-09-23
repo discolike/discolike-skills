@@ -65,10 +65,10 @@ Opens the browser for OAuth and stores the session under `~/.config/discolike/`.
 **No account:**
 
 ```bash
-discolike signup --email <work email> --first-name <first> --last-name <last>
+discolike signup --email 'jane@acme.com' --first-name 'Jane' --last-name 'Doe'
 ```
 
-Nothing sensitive comes back. The person confirms by email, picks a plan, and then runs `discolike auth login`. Free-mail and disposable domains are rejected; a `409` means the account exists, so send them to log in. Stop here and tell the user what to do next; the rest of setup waits for the confirmed account.
+Single-quote every value so spaces and shell characters in a name stay literal; a name with an apostrophe goes in double quotes instead. Nothing sensitive comes back. The person confirms by email, picks a plan, and then runs `discolike auth login`. Free-mail and disposable domains are rejected; a `409` means the account exists, so send them to log in. Stop here and tell the user what to do next; the rest of setup waits for the confirmed account.
 
 ## 5. Verify
 

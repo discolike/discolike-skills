@@ -29,10 +29,10 @@ Write the title and body. Strip API keys, emails of third parties, and full resu
 
 ## 4. File it
 
-With the GitHub CLI signed in (`gh auth status` exit 0):
+With the GitHub CLI signed in (`gh auth status` exit 0), write the confirmed title and body to two files with the file-writing tool, never by echoing them through the shell, then hand `gh` the files. The text never touches shell syntax, so quotes, `$(...)`, and backticks in a bug report stay literal:
 
 ```bash
-gh issue create --repo Discolike/<repo> --title "<title>" --body "<body>" --label "<bug|feedback>"
+gh issue create --repo Discolike/<repo> --title "$(cat issue-title.txt)" --body-file issue-body.md --label "<bug|feedback>"
 ```
 
 Without `gh`, print a prefilled link for the user to open:
