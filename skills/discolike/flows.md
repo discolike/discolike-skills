@@ -117,24 +117,24 @@ Use the CLI for this flow. `discolike bulk` prints progress on stderr and one JS
 
 Users paste screenshots of the Discover and Contacts forms and ask for "this exact search" over the API. Every field maps to a parameter; the names that differ from the label:
 
-| App field                              | Parameter                                                                   |
-| -------------------------------------- | --------------------------------------------------------------------------- |
-| Lookalike Domains                      | `domain`                                                                    |
-| Lookalike Text                         | `icp_text`                                                                  |
-| Homepage Text chips (thumbs up / down) | `phrase_match` / `negate_phrase_match`; a starred chip is `+phrase`         |
-| Industry Group                         | `category`, upper snake case (`ADVERTISING_AND_MARKETING`, `HEALTHCARE`)    |
-| Employees, Revenue                     | `employee_range` `"11,200"`, `revenue_range` `"1000000,50000000"` (strings) |
-| Digital Footprint slider               | `min_digital_footprint`, `max_digital_footprint`                            |
-| Precision: Domain Consensus            | `consensus`                                                                 |
-| Precision: Industry Variance           | `variance` (`LOW`, `MID_LOW`, `MEDIUM`, `MID_HIGH`, `HIGH`, `UNRESTRICTED`) |
-| Precision: Minimum Similarity          | `min_similarity`                                                            |
-| Skip Profiles with Redirects           | `redirect: false`                                                           |
-| Include Lookalike Query Domains        | `include_search_domains: true`                                              |
-| Exclude Lead Gen                       | `exclude_leadgen: true`                                                     |
-| Contacts: Persona Lookalike Text       | `icp_text` on the contacts call                                             |
-| Contacts: Profile Phrase Match (red)   | `negate_summary`, one string, chips joined with commas                      |
-| Contacts: Results Per Company          | `results_by_company`                                                        |
-| Contacts: Max Companies                | `max_companies` (not with `max_records`)                                    |
-| Contacts: Source = Results Table       | pass the company run's domains as `domain`                                  |
+| App field                              | Parameter                                                                                                                                      |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Lookalike Domains                      | `domain`                                                                                                                                       |
+| Lookalike Text                         | `icp_text`, never `icp_prompt`: the prompt extracts and applies its own filters, ICP text and seed domains, so the run stops matching the form |
+| Homepage Text chips (thumbs up / down) | `phrase_match` / `negate_phrase_match`; a starred chip is `+phrase`                                                                            |
+| Industry Group                         | `category`, upper snake case (`ADVERTISING_AND_MARKETING`, `HEALTHCARE`)                                                                       |
+| Employees, Revenue                     | `employee_range` `"11,200"`, `revenue_range` `"1000000,50000000"` (strings)                                                                    |
+| Digital Footprint slider               | `min_digital_footprint`, `max_digital_footprint`                                                                                               |
+| Precision: Domain Consensus            | `consensus`                                                                                                                                    |
+| Precision: Industry Variance           | `variance` (`LOW`, `MID_LOW`, `MEDIUM`, `MID_HIGH`, `HIGH`, `UNRESTRICTED`)                                                                    |
+| Precision: Minimum Similarity          | `min_similarity`                                                                                                                               |
+| Skip Profiles with Redirects           | `redirect: false`                                                                                                                              |
+| Include Lookalike Query Domains        | `include_search_domains: true`                                                                                                                 |
+| Exclude Lead Gen                       | `exclude_leadgen: true`                                                                                                                        |
+| Contacts: Persona Lookalike Text       | `icp_text` on the contacts call                                                                                                                |
+| Contacts: Profile Phrase Match (red)   | `negate_summary`, one string, chips joined with commas                                                                                         |
+| Contacts: Results Per Company          | `results_by_company`                                                                                                                           |
+| Contacts: Max Companies                | `max_companies` (not with `max_records`)                                                                                                       |
+| Contacts: Source = Results Table       | pass the company run's domains as `domain`                                                                                                     |
 
 CLI flags follow the parameter names (`--min-similarity 70`, `--no-redirect`, `--exclude-leadgen`); anything without a flag goes through `--param key=value`, and a whole form goes in as `--params-file form.json` (a JSON object keyed by these parameter names, accepted by `discover`, `count`, `contacts discover|search|count`, and `bulk`). The CLI validates the assembled request against the SDK model before the first billable call; in a script, `DiscoverParams.model_validate(...)` does the same.
