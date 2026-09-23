@@ -2,7 +2,10 @@
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "discolike",
   "description": "DiscoLike skills for coding agents: company discovery, enrichment, and contacts across 80M+ business websites.",
-  "owner": { "name": "DiscoLike", "url": "https://discolike.com" },
+  "owner": {
+    "name": "DiscoLike",
+    "url": "https://discolike.com"
+  },
   "plugins": [
     {
       "name": "discolike",
@@ -10,7 +13,14 @@
       "source": "./",
       "category": "data",
       "homepage": "https://discolike.com/mcp/",
-      "keywords": ["mcp", "b2b-data", "company-search", "sales-intelligence", "gtm"]
+      "keywords": [
+        "mcp",
+        "b2b-data",
+        "company-search",
+        "sales-intelligence",
+        "gtm"
+      ],
+      "version": "1.0.0"
     }
   ]
 }

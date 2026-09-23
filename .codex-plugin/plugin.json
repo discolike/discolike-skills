@@ -1,6 +1,6 @@
 {
   "name": "discolike",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Company discovery, enrichment, and contact research with DiscoLike.",
   "author": {
     "name": "DiscoLike",
@@ -10,7 +10,13 @@
   "homepage": "https://discolike.com/mcp/",
   "repository": "https://github.com/Discolike/discolike-skills",
   "license": "MIT",
-  "keywords": ["b2b-data", "company-search", "contacts", "mcp", "sales-intelligence"],
+  "keywords": [
+    "b2b-data",
+    "company-search",
+    "contacts",
+    "mcp",
+    "sales-intelligence"
+  ],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
@@ -19,12 +25,15 @@
     "longDescription": "Use DiscoLike to discover target accounts, enrich company lists, and find decision-maker contacts.",
     "developerName": "DiscoLike",
     "category": "Productivity",
-    "capabilities": ["Interactive"],
+    "capabilities": [
+      "Interactive"
+    ],
     "defaultPrompt": [
       "Find US cybersecurity companies with 51 to 500 employees.",
       "Enrich this account list with company data and technology stack.",
       "Find VP Sales contacts at these companies."
     ],
     "brandColor": "#3367F1"
-  }
+  },
+  "hooks": "./hooks/codex-hooks.json"
 }
