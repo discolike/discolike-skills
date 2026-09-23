@@ -18,6 +18,7 @@
     "sales-intelligence"
   ],
   "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "DiscoLike",
     "shortDescription": "Find and enrich companies from coding agents.",

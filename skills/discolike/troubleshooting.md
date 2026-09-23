@@ -2,7 +2,7 @@
 
 Work top to bottom; the first fix usually ends it. Adding more exclusion language is almost never the answer.
 
-1. **Negations inside the ICP text.** "Does not sell apparel, candles, supplements" in `icp_prompt` or `icp_text` pulls results toward those words; the text is matched on meaning, not read as rules. Strip every negative clause; describe only what the ideal company is.
+1. **Negations inside the ICP text.** "Does not sell apparel, candles, supplements" in `icp_prompt` pulls results toward those words; the text is matched on meaning, not read as rules. Strip every negative clause; describe only what the ideal company is.
 2. **A positive category too broad.** E-Commerce admits every DTC brand. Pick the narrowest positive category that still contains the targets before touching any negation.
 3. **Seeds that bridge into the noise.** Seeds are the strongest signal in the search. Read each seed with `extract-website-text`: a fitness wearable site reads as running and wellness, so sportswear follows. Do not mix sub-verticals in one search; run them separately, net-new billing makes the split free for repeats.
 4. **A seed that is the wrong company.** Guessed domains resolve to the wrong business. Confirm each seed with `extract-website-text` before the first pull.
