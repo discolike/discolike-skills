@@ -113,6 +113,14 @@ New account, no ICP written down, or "set up my ICP".
 
 Use the CLI for this flow. `discolike bulk` prints progress on stderr and one JSON summary on stdout, validates every request against the SDK model before the first billable call (a typo exits 2 with no spend), and manages the paging fields (`max_records`, `offset`, `exclude_domain`, `domain`, `results_by_company`, `max_companies`); a supplied value for one of those is dropped with a note. Any other filter goes through `--param` or `--params-file`. Only fall back to an SDK script when the installed CLI is older than 0.4.0.
 
+### Flow 11: agentic prospecting run (available once the prospecting release ships)
+
+"Run prospecting for me", a chat-driven brief instead of a hand-tuned discover call. Not released yet; the tools below exist on an unreleased branch (no pinned CLI support), check this flow is live before using it.
+
+1. **Start and wait.** MCP `start-prospecting`, REST `POST /prospecting/runs` with an `Idempotency-Key` header, or SDK `run = client.prospecting.start(ProspectingBrief(brief="...", target_companies=...), idempotency_key=...)`. Then MCP `get-prospecting-run` (poll every 5s), SDK `client.prospecting.wait(run.run_id)`, or poll `GET /prospecting/runs/{run_id}`, until `status` is terminal (`completed`, `failed`, `cancelled`); `needs_input` and `proposed` pause for an answer or an approval, they are not finished. A big list is a supported target, not an edge case: `target_companies` goes up to 10,000.
+2. **Export or push every part.** The REST/SDK response's `saved_query_ids` lists every saved contact list for the run, in order, with `saved_query_id` always equal to the first entry. Large results split across several lists rather than truncating, so export or `push-to-crm` each id in `saved_query_ids`, never just `saved_query_id` alone. MCP's `get-prospecting-run` does not return `saved_query_ids` (it is REST/SDK only); to find every part over MCP, list saved queries tagged `prospecting` (and `part`, when the result was split) instead of guessing a single id. Parts are only final once the run reaches a terminal status; reading them mid-run gets a partial part.
+3. **Companies stay one list.** The companies result is never split into parts; it is tagged `partial` when the run hit the company cap, so check that tag rather than assuming the list is short by mistake.
+
 ### Replicating a search from the app
 
 Users paste screenshots of the Discover and Contacts forms and ask for "this exact search" over the API. Every field maps to a parameter; the names that differ from the label:
