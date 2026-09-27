@@ -18,6 +18,7 @@ Requires a paid plan from $99/month. There is no free tier. Counting results is 
 | `troubleshooting.md` | Results look noisy, counts do not add up, or the user says "these are wrong".                                                                                                                             |
 | `discogen.md`        | The question is research, not a filter ("do they sell to hospitals?", "estimated ad spend?").                                                                                                             |
 | `flows.md` Flow 10   | The user wants everything that matches, tens of thousands of companies or 100,000+ contacts, or asks to replicate an app search over the API.                                                             |
+| `flows.md` Flow 11   | The user wants a chat-driven prospecting run instead of a hand-tuned discover call (once that release ships).                                                                                             |
 
 Read a file when its row applies; do not load all three up front.
 
