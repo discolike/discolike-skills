@@ -74,7 +74,7 @@ Always set `variance` explicitly on API, CLI, and SDK calls (`MEDIUM` is the app
 
 - Contacts at the matched companies: contacts search with a persona description, seniority, or department. Returns email, phone, LinkedIn. Emails are pattern-derived unless `email_validated` is set, which keeps only addresses we have verified.
 - Enrich a list you already have: bizdata, vendors, growth, score, redirects, subsidiaries per domain, or bulk append from CSV.
-- Segment a customer list into ICP clusters with descriptions, then run lookalikes per cluster.
+- Find lookalikes of a customer list segment by segment: once the prospecting release ships, a prospecting run with `customer_domains` groups the customers and expands each group (Flow 11); until then, segment and run lookalikes per cluster by hand (Flow 4).
 - Validate a list against an ICP description: fit yes/no with a confidence level and reasoning per domain.
 - Push to HubSpot, Salesforce, Pipedrive via the CRM tools.
 
