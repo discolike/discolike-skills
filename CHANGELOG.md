@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Flow 11 covers seeded runs (`customer_domains`, segment selection, results segments); Flow 4 points to it.
 - Claude Code plugin no longer auto-approves its skills or `WebFetch` of DiscoLike hosts; both go through the normal permission prompt. The approval hook script and its tests are removed.
 - Claude plugin manifest declares the privacy policy and terms of service URLs, and the plugin ships a listing icon.
 - The plugin no longer ships the pinned CLI launcher, so it runs no local code. `setup` asks the user to install `discolike-cli` 0.4.1 or later themselves.
