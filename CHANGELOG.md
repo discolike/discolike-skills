@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Flow 11 covers seeded runs (`customer_domains`, segment selection, results segments); Flow 4 points to it.
+
 ## 1.0.0 - 2026-09-15
 
 - Flow 10 runs on `discolike bulk companies|estimate|contacts` (checkpoint and resume, local validation, one call in flight) instead of an SDK script, and forms go in as `--params-file form.json`. Flows 1, 5, and 9 use `--domains-file` for lists. Needs `discolike-cli` 0.4.1, pinned in `bin/cli-version` (0.4.0 was yanked: it failed to start under Typer 0.27).
