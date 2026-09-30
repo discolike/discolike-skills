@@ -33,7 +33,12 @@
       "Enrich this account list with company data and technology stack.",
       "Find VP Sales contacts at these companies."
     ],
-    "brandColor": "#3367F1"
+    "brandColor": "#3367F1",
+    "logo": "./assets/discolike-icon.png",
+    "composerIcon": "./assets/discolike-icon.png",
+    "websiteURL": "https://discolike.com",
+    "privacyPolicyURL": "https://discolike.com/terms-conditions/#privacy-policy",
+    "termsOfServiceURL": "https://discolike.com/terms-conditions/"
   },
   "hooks": "./hooks/codex-hooks.json"
 }
