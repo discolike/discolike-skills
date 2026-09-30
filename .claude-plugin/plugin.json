@@ -5,7 +5,8 @@
   "version": "1.0.1",
   "author": {
     "name": "DiscoLike",
-    "email": "support@discolike.com"
+    "email": "support@discolike.com",
+    "url": "https://discolike.com"
   },
   "homepage": "https://discolike.com/mcp/",
   "documentationUrl": "https://docs.discolike.com",
