@@ -21,10 +21,10 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "DiscoLike",
-    "shortDescription": "Find and enrich companies from coding agents.",
-    "longDescription": "Use DiscoLike to discover target accounts, enrich company lists, and find decision-maker contacts.",
+    "shortDescription": "B2B company and contact search",
+    "longDescription": "Prospecting and account research for sales and GTM teams. Search 80M+ business websites to build target account lists and lookalikes of existing customers, enrich companies with firmographics, technology stack, and growth signals, find decision-maker contacts and verified emails, and push results to HubSpot, Salesforce, or Pipedrive.",
     "developerName": "DiscoLike",
-    "category": "Productivity",
+    "category": "Business & Operations",
     "capabilities": [
       "Interactive",
       "Read",

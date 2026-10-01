@@ -4,7 +4,7 @@
 
 - Plain `discolike` CLI calls no longer auto-approve: the CLI approval hook is gone from Claude Code, Cursor, and Codex, and no skill pre-approves `Bash`, so every shell command goes through the client's normal permission prompt. Skill and DiscoLike-docs `WebFetch` auto-approval in Claude Code stays.
 - Skill no longer pre-approves `uvx --from discolike-cli` or `Write`, and its text no longer tells the agent which calls skip a permission prompt. API keys go into `DISCOLIKE_API_KEY` or `auth login --api-key` run by the user, never through chat. Signup sends only after the user confirms the exact email and name.
-- Codex manifest declares `Read` and `Write` capabilities, website, privacy and terms URLs, and the icon.
+- Codex manifest declares `Read` and `Write` capabilities, website, privacy and terms URLs, and the icon; listing moves to Business & Operations with a 30-character subtitle.
 
 ## 1.0.0 - 2026-09-15
 
