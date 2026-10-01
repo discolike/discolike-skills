@@ -40,9 +40,9 @@ The plugin bundles `bin/discolike`, a launcher that runs `discolike-cli` at the 
   discolike --version 2>/dev/null; cat "<PLUGIN_ROOT>/bin/cli-version"
   ```
 
-  If bare `discolike` is a standalone install older than the pin, the user can upgrade it themselves (`pip install --upgrade discolike-cli` or `uv tool upgrade discolike-cli`) or use the launcher instead.
+  If bare `discolike` is a standalone install older than the pin, the user can upgrade it themselves (`pip install --upgrade discolike-cli` or `uv tool upgrade discolike-cli`). Rerun `discolike --version` afterwards; once it is at or above the pin, keep using it and skip the PATH step below.
 
-  If bare `discolike` is missing or older than the pin, add the launcher to PATH for this session and for future shells. Tell the user which file you are editing before you edit it:
+  If bare `discolike` is still missing or older than the pin, add the launcher to PATH for this session and for future shells. Tell the user which file you are editing before you edit it:
 
   ```bash
   export PATH="<PLUGIN_ROOT>/bin:$PATH"
