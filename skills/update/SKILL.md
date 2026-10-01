@@ -1,7 +1,7 @@
 ---
 name: update
 description: DiscoLike update — move the plugin and its pinned `discolike` CLI to the latest release. Use when the user asks to update or upgrade DiscoLike, when a skill reports the CLI is out of date, or when a command fails with an unknown-command error naming a subcommand that should exist.
-allowed-tools: Bash, Read
+allowed-tools: Read
 ---
 
 # Updating DiscoLike

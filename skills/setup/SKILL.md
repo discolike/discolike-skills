@@ -1,7 +1,7 @@
 ---
 name: setup
 description: DiscoLike setup — connect the agent to DiscoLike. Use when no DiscoLike MCP tools are visible and `discolike` is not on PATH, when `discolike auth status` or `account usage` fails on auth, when the CLI on PATH is older than the plugin's pinned version, or when the user asks to set up, connect, or log in to DiscoLike. Signs in, or opens an account when there is none.
-allowed-tools: Bash, Read, AskUserQuestion
+allowed-tools: Read, AskUserQuestion
 ---
 
 # DiscoLike setup
@@ -60,9 +60,9 @@ discolike auth login
 
 Opens the browser for OAuth and stores the session under `~/.config/discolike/`. Over SSH or without a browser, `discolike auth login --no-browser --port 8765` prints the URL to open elsewhere.
 
-**Yes, key in hand:** `discolike auth login --api-key <KEY>`. Take the key from the user; never read it from a file they did not name, and never write it into a config file yourself.
+**Yes, key in hand:** ask the user to run `discolike auth login --api-key <KEY>` themselves, or set `DISCOLIKE_API_KEY` in their own shell. Never ask for the key in chat, never read it from a file they did not name, and never write it into a config file yourself.
 
-**No account:**
+**No account:** ask for the work email, first and last name, show the user the exact values, and run this only after they say yes.
 
 ```bash
 discolike signup --email 'jane@acme.com' --first-name 'Jane' --last-name 'Doe'
@@ -87,4 +87,3 @@ Report the plan and remaining quota in one sentence. Then return to whatever the
 | Browser never opens                         | Headless or SSH session                            | `discolike auth login --no-browser --port <n>` and forward the port                                      |
 | MCP tools missing after adding the server   | Client needs a restart, or OAuth was not completed | Restart the client, retry the authorization                                                              |
 | `exit_code=5` from the launcher             | `uv` missing                                       | Install uv, rerun                                                                                        |
-| Every CLI call prompts for permission       | Hook not active                                    | Reinstall the plugin; only plain `discolike …` calls are auto-approved, redirects and `&&` always prompt |

@@ -1,7 +1,7 @@
 ---
 name: feedback
 description: DiscoLike feedback — file a bug report or product feedback with the DiscoLike team as a GitHub issue. Use when the user wants to report a problem with DiscoLike, the skills, the CLI, the MCP server, or the SDK, or says "send feedback", "report this", or "this should work differently".
-allowed-tools: Bash, AskUserQuestion
+allowed-tools: AskUserQuestion
 ---
 
 # DiscoLike feedback

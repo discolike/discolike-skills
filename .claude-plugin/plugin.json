@@ -1,7 +1,7 @@
 {
   "name": "discolike",
   "description": "Company search for agents: find target accounts, firmographics, technographics, and contacts across 80M+ business websites via the DiscoLike MCP server, CLI, or Python SDK.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "DiscoLike",
     "email": "support@discolike.com"
@@ -20,15 +20,6 @@
   ],
   "hooks": {
     "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/approve-cli.sh claude"
-          }
-        ]
-      },
       {
         "matcher": "Skill|WebFetch",
         "hooks": [
