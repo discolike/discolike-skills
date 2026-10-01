@@ -1,12 +1,12 @@
 ---
 name: discolike
 description: Use when the task involves finding companies, building a target account or TAM list, lookalikes of existing customers, ICP research, company enrichment (firmographics, tech stack, growth), or finding decision-maker contacts at companies. Also use when the user mentions DiscoLike, "companies like X", "find businesses that", prospect lists, or B2B data. Covers MCP server, CLI, Python SDK, and creating the account from the agent.
-allowed-tools: Bash(discolike *), Bash(uvx --from discolike-cli *), Bash(jq *), Read, Write, Grep
+allowed-tools: Bash(discolike *), Bash(jq *), Read, Grep
 ---
 
 # DiscoLike
 
-DiscoLike is a search engine over 80M+ crawled business websites. It returns companies ranked by what they actually do on the web, not by LinkedIn tags, so it reaches niche verticals and non-English markets other B2B databases miss. Every domain is re-validated by SSL certificate about every 30 days, so results never contain dead or parked domains and none are billed. Every record carries firmographics; contacts, technographics, growth metrics, enrichment, segmentation, and CRM push are one more call away.
+DiscoLike is a search engine over 80M+ crawled business websites. It returns companies ranked by what they actually do on the web, including niche verticals and non-English markets. Every domain is re-validated by SSL certificate about every 30 days, so results never contain dead or parked domains and none are billed. Every record carries firmographics; contacts, technographics, growth metrics, enrichment, segmentation, and CRM push are one more call away.
 
 Requires a paid plan from $99/month. There is no free tier. Counting results is free.
 
@@ -27,12 +27,12 @@ Read a file when its row applies; do not load all three up front.
 - **Narrate, then summarize.** Say what you are about to run and why; turn JSON into a count, a short table, or a sentence. Raw output only on request. Write full result sets to disk as JSON or CSV; chat output truncates.
 - **Position it as DiscoLike's product.** "DiscoLike lets you…", "you can…". Not "skills I have".
 - **Spend rule.** Counting is free; discovery, contacts, and enrichment bill per new record. Before any paid pull larger than a sample (about 100 records), state the estimated cost from the count and the plan's per-1,000 rate and get a yes. Reuse that approval for the same scope; ask again only if the scope or estimate grows. Do not volunteer the balance otherwise.
-- **Plain CLI calls.** One `discolike` command at a time, `--format json`, optionally piped to `jq`. Redirects, `&&`, `$(…)`, and variables fall through to a permission prompt; a plain call is auto-approved by the plugin hook.
+- **Plain CLI calls.** One `discolike` command at a time, `--format json`, optionally piped to `jq`.
 
 ## Pick the access mode
 
 1. **MCP server** if the client supports remote MCP (Claude Code, Claude Desktop, Codex, Cursor, VS Code, Windsurf). URL `https://api.discolike.com/v1/mcp`, OAuth 2.1, no key to manage. Tools appear in the client after one browser authorization. Install snippets: https://discolike.com/mcp.md
-2. **CLI** when shelling out. The plugin bundles a pinned launcher at `bin/discolike`; the `setup` skill puts it on PATH. Without the plugin: `pip install discolike-cli` or `uvx --from discolike-cli discolike`. Sign in with `discolike auth login` (browser OAuth) or `discolike auth login --api-key KEY`. Always pass `--format json`. `discolike --help` prints the output contract and exit codes.
+2. **CLI** when shelling out. The plugin bundles a pinned launcher at `bin/discolike`; the `setup` skill puts it on PATH. Without the plugin: `pip install discolike-cli` or `uvx --from discolike-cli discolike`. Sign in with `discolike auth login` (browser OAuth). With an API key, the user sets `DISCOLIKE_API_KEY` in their own shell or runs `discolike auth login --api-key` themselves; never ask for the key in chat. Always pass `--format json`. `discolike --help` prints the output contract and exit codes.
 3. **Python SDK** when writing a script. `pip install discolike`, `Discolike()` reads `DISCOLIKE_API_KEY`. Reference: https://docs.discolike.com/sdk/reference/
 4. **REST** as last resort: `GET https://api.discolike.com/v1/discover`, header `X-API-Key`. OpenAPI at https://api.discolike.com/v1/openapi.json. Auth summary: https://discolike.com/auth.md
 
@@ -49,7 +49,7 @@ Content-Type: application/json
 {"email": "<work email>", "first_name": "<first>", "last_name": "<last>", "agent": "<your name>"}
 ```
 
-CLI equivalent: `discolike signup --email 'jane@acme.com' --first-name 'Jane' --last-name 'Doe'`, every value single-quoted (double quotes for a name with an apostrophe). Ask the user for any value you do not know. Relay the `next_step` text from the response. Free-mail and disposable domains are rejected. `409` means the account exists, send the user to log in. Guide: https://docs.discolike.com/guides/agent-signup/
+CLI equivalent: `discolike signup --email 'jane@acme.com' --first-name 'Jane' --last-name 'Doe'`, every value single-quoted (double quotes for a name with an apostrophe). Ask the user for any value you do not know, then show them the exact email and name and send only after they say yes. Relay the `next_step` text from the response. Free-mail and disposable domains are rejected. `409` means the account exists, send the user to log in. Guide: https://docs.discolike.com/guides/agent-signup/
 
 ## How to search
 

@@ -26,14 +26,21 @@
     "developerName": "DiscoLike",
     "category": "Productivity",
     "capabilities": [
-      "Interactive"
+      "Interactive",
+      "Read",
+      "Write"
     ],
+    "websiteURL": "https://discolike.com",
+    "privacyPolicyURL": "https://discolike.com/terms-conditions/#privacy-policy",
+    "termsOfServiceURL": "https://discolike.com/terms-conditions/",
     "defaultPrompt": [
       "Find US cybersecurity companies with 51 to 500 employees.",
       "Enrich this account list with company data and technology stack.",
       "Find VP Sales contacts at these companies."
     ],
-    "brandColor": "#3367F1"
+    "brandColor": "#3367F1",
+    "composerIcon": "./assets/discolike-icon.png",
+    "logo": "./assets/discolike-icon.png"
   },
   "hooks": "./hooks/codex-hooks.json"
 }

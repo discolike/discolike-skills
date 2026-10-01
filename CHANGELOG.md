@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Skill no longer pre-approves `uvx --from discolike-cli` or `Write`, and its text no longer tells the agent which calls skip a permission prompt. API keys go into `DISCOLIKE_API_KEY` or `auth login --api-key` run by the user, never through chat. Signup sends only after the user confirms the exact email and name.
+- Codex manifest declares `Read` and `Write` capabilities, website, privacy and terms URLs, and the icon.
+
 ## 1.0.0 - 2026-09-15
 
 - Flow 10 runs on `discolike bulk companies|estimate|contacts` (checkpoint and resume, local validation, one call in flight) instead of an SDK script, and forms go in as `--params-file form.json`. Flows 1, 5, and 9 use `--domains-file` for lists. Needs `discolike-cli` 0.4.1, pinned in `bin/cli-version` (0.4.0 was yanked: it failed to start under Typer 0.27).
