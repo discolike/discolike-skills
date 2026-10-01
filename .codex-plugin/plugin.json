@@ -31,8 +31,8 @@
       "Write"
     ],
     "websiteURL": "https://discolike.com",
-    "privacyPolicyURL": "https://discolike.com/terms-conditions/#privacy-policy",
-    "termsOfServiceURL": "https://discolike.com/terms-conditions/",
+    "privacyPolicyURL": "https://discolike.com/privacy-policy/",
+    "termsOfServiceURL": "https://discolike.com/terms-of-service/",
     "defaultPrompt": [
       "Find US cybersecurity companies with 51 to 500 employees.",
       "Enrich this account list with company data and technology stack.",
