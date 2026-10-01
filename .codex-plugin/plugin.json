@@ -1,6 +1,6 @@
 {
   "name": "discolike",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Company discovery, enrichment, and contact research with DiscoLike.",
   "author": {
     "name": "DiscoLike",
@@ -41,6 +41,5 @@
     "brandColor": "#3367F1",
     "composerIcon": "./assets/discolike-icon.png",
     "logo": "./assets/discolike-icon.png"
-  },
-  "hooks": "./hooks/codex-hooks.json"
+  }
 }

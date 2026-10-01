@@ -1,7 +1,7 @@
 ---
 name: setup
 description: DiscoLike setup — connect the agent to DiscoLike. Use when no DiscoLike MCP tools are visible and `discolike` is not on PATH, when `discolike auth status` or `account usage` fails on auth, when the CLI on PATH is older than the plugin's pinned version, or when the user asks to set up, connect, or log in to DiscoLike. Signs in, or opens an account when there is none.
-allowed-tools: Bash, Read, AskUserQuestion
+allowed-tools: Read, AskUserQuestion
 ---
 
 # DiscoLike setup
@@ -87,4 +87,3 @@ Report the plan and remaining quota in one sentence. Then return to whatever the
 | Browser never opens                         | Headless or SSH session                            | `discolike auth login --no-browser --port <n>` and forward the port                                      |
 | MCP tools missing after adding the server   | Client needs a restart, or OAuth was not completed | Restart the client, retry the authorization                                                              |
 | `exit_code=5` from the launcher             | `uv` missing                                       | Install uv, rerun                                                                                        |
-| Every CLI call prompts for permission       | Hook not active                                    | Reinstall the plugin; only plain `discolike …` calls are auto-approved, redirects and `&&` always prompt |

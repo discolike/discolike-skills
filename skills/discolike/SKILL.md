@@ -1,7 +1,7 @@
 ---
 name: discolike
 description: Use when the task involves finding companies, building a target account or TAM list, lookalikes of existing customers, ICP research, company enrichment (firmographics, tech stack, growth), or finding decision-maker contacts at companies. Also use when the user mentions DiscoLike, "companies like X", "find businesses that", prospect lists, or B2B data. Covers MCP server, CLI, Python SDK, and creating the account from the agent.
-allowed-tools: Bash(discolike *), Bash(jq *), Read, Grep
+allowed-tools: Read, Grep
 ---
 
 # DiscoLike
