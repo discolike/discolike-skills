@@ -1,6 +1,6 @@
 # DiscoGen, when a question is not a filter
 
-"Do they sell to hospitals?", "Is pricing public?", "Estimated monthly ad spend?" are research prompts, not filters. MCP `run-discogen` on a domain list with `web_search=true`, one call for the whole list, never one call per domain and never split across parallel tasks: all tasks share the user's provider key and rate-limit each other. CLI `discolike discogen ...`. SDK `client.discogen.process(DiscoGenProcessRequest(query=..., domains=[...], web_search=True))` then `job.wait()`. Runs on the user's own LLM and search keys; DiscoLike bills a submit fee plus net-new records, and records from the last 90 days are cached, so a rerun costs the submit fee.
+"Do they sell to hospitals?", "Is pricing public?", "Estimated monthly ad spend?" are research prompts, not filters. MCP `research-companies` on a domain list with `web_search=true`, one call for the whole list, never one call per domain and never split across parallel tasks: all tasks share the user's provider key and rate-limit each other. CLI `discolike discogen ...`. SDK `client.discogen.process(DiscoGenProcessRequest(query=..., domains=[...], web_search=True))` then `job.wait()`. Runs on the user's own LLM and search keys; DiscoLike bills a submit fee plus net-new records, and records from the last 90 days are cached, so a rerun costs the submit fee.
 
 Rules that decide whether the column is usable:
 
