@@ -33,7 +33,7 @@ The plugin bundles `bin/discolike`, a launcher that runs `discolike-cli` at the 
 "<PLUGIN_ROOT>/bin/discolike" --version; echo "exit_code=$?"
 ```
 
-- **exit_code=5** with `uv is not installed`: install uv (`curl -LsSf https://astral.sh/uv/install.sh | sh`, or `pip install uv`), then rerun.
+- **exit_code=5** with `uv is not installed`: ask the user to install uv (https://docs.astral.sh/uv/getting-started/installation/), then rerun.
 - **exit_code=0**: the launcher works. Compare its version against whatever bare `discolike` reports:
 
   ```bash
@@ -80,10 +80,10 @@ Report the plan and remaining quota in one sentence. Then return to whatever the
 
 ## Troubleshooting
 
-| Symptom                                     | Cause                                              | Fix                                                                                                      |
-| ------------------------------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `discolike: command not found` after step 3 | PATH edit not in this shell                        | Use the launcher's absolute path, or open a new shell                                                    |
-| `auth status` exit 3 right after login      | Expired OAuth session                              | `discolike auth logout`, then `discolike auth login`                                                     |
-| Browser never opens                         | Headless or SSH session                            | `discolike auth login --no-browser --port <n>` and forward the port                                      |
-| MCP tools missing after adding the server   | Client needs a restart, or OAuth was not completed | Restart the client, retry the authorization                                                              |
-| `exit_code=5` from the launcher             | `uv` missing                                       | Install uv, rerun                                                                                        |
+| Symptom                                     | Cause                                              | Fix                                                                 |
+| ------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------- |
+| `discolike: command not found` after step 3 | PATH edit not in this shell                        | Use the launcher's absolute path, or open a new shell               |
+| `auth status` exit 3 right after login      | Expired OAuth session                              | `discolike auth logout`, then `discolike auth login`                |
+| Browser never opens                         | Headless or SSH session                            | `discolike auth login --no-browser --port <n>` and forward the port |
+| MCP tools missing after adding the server   | Client needs a restart, or OAuth was not completed | Restart the client, retry the authorization                         |
+| `exit_code=5` from the launcher             | `uv` missing                                       | Install uv, rerun                                                   |
