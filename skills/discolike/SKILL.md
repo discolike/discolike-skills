@@ -40,7 +40,7 @@ If neither MCP nor CLI is signed in, run the `setup` skill. Never paste an API k
 
 ## No account yet
 
-Create it without a browser. No credential comes back; the person confirms by email, logs in, picks a plan, and issues the key or authorizes the MCP client.
+Create it without a browser. No credential comes back; the person confirms by email, logs in, picks a plan, and issues the key or authorizes the MCP client. Before either method below, ask the user for any value you do not know, show them the exact email and name, and send only after they say yes.
 
 ```
 POST https://api.discolike.com/v1/public/signup
@@ -49,7 +49,7 @@ Content-Type: application/json
 {"email": "<work email>", "first_name": "<first>", "last_name": "<last>", "agent": "<your name>"}
 ```
 
-CLI equivalent: `discolike signup --email 'jane@acme.com' --first-name 'Jane' --last-name 'Doe'`, every value single-quoted (double quotes for a name with an apostrophe). Ask the user for any value you do not know, then show them the exact email and name and send only after they say yes. Relay the `next_step` text from the response. Free-mail and disposable domains are rejected. `409` means the account exists, send the user to log in. Guide: https://docs.discolike.com/guides/agent-signup/
+CLI equivalent: `discolike signup --email 'jane@acme.com' --first-name 'Jane' --last-name 'Doe'`, every value single-quoted (double quotes for a name with an apostrophe). Relay the `next_step` text from the response. Free-mail and disposable domains are rejected. `409` means the account exists, send the user to log in. Guide: https://docs.discolike.com/guides/agent-signup/
 
 ## How to search
 

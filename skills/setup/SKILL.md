@@ -27,7 +27,7 @@ Read the exit code and the JSON, not any prose.
 
 ## 3. Put the pinned launcher on PATH
 
-The plugin bundles `bin/discolike`, a launcher that runs `discolike-cli` at the version in `bin/cli-version` through `uvx`. Resolve the plugin root: `$CLAUDE_PLUGIN_ROOT` when the harness exports it, otherwise two levels above this skill's directory.
+The plugin bundles `bin/discolike`, a launcher that runs `discolike-cli` at the version in `bin/cli-version` through `uvx`. Resolve the plugin root: `$CLAUDE_PLUGIN_ROOT` when the harness exports it, otherwise two levels above this skill's directory. On first run the launcher downloads that pinned `discolike-cli` from PyPI, so tell the user and run it only after they say yes.
 
 ```bash
 "<PLUGIN_ROOT>/bin/discolike" --version; echo "exit_code=$?"
@@ -39,6 +39,8 @@ The plugin bundles `bin/discolike`, a launcher that runs `discolike-cli` at the 
   ```bash
   discolike --version 2>/dev/null; cat "<PLUGIN_ROOT>/bin/cli-version"
   ```
+
+  If bare `discolike` is a standalone install older than the pin, the user can upgrade it themselves (`pip install --upgrade discolike-cli` or `uv tool upgrade discolike-cli`) or use the launcher instead.
 
   If bare `discolike` is missing or older than the pin, add the launcher to PATH for this session and for future shells. Tell the user which file you are editing before you edit it:
 
