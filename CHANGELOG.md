@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Claude Code plugin no longer auto-approves its skills or `WebFetch` of DiscoLike hosts; both go through the normal permission prompt.
+- Claude Code plugin no longer auto-approves its skills or `WebFetch` of DiscoLike hosts; both go through the normal permission prompt. The approval hook script and its tests are removed.
 - Claude plugin manifest declares the icon and privacy policy URL.
 - Launcher points to the uv install docs instead of printing a download-and-run command.
 
