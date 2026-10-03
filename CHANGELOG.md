@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Claude Code plugin no longer auto-approves its skills or `WebFetch` of DiscoLike hosts; both go through the normal permission prompt. The approval hook script and its tests are removed.
+- Claude plugin manifest declares the icon and privacy policy URL.
+- Launcher points to the uv install docs instead of printing a download-and-run command.
+
 ## 1.0.1 - 2026-09-30
 
 - Plain `discolike` CLI calls no longer auto-approve: the CLI approval hook is gone from Claude Code, Cursor, and Codex, and no skill pre-approves `Bash`, so every shell command goes through the client's normal permission prompt. Skill and DiscoLike-docs `WebFetch` auto-approval in Claude Code stays.
