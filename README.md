@@ -83,12 +83,12 @@ If a client does not support rules or skills, give it the contents of `AGENTS.md
 
 ## What the plugin bundles
 
-| Piece                               | Purpose                                                                                                                                                                  |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `skills/discolike/`                 | Entry-point skill plus `flows.md`, `troubleshooting.md`, `discogen.md`, loaded on demand                                                                                 |
-| `skills/setup/`, `skills/feedback/` | Connect and report                                                                                                                                                       |
-| `bin/discolike`                     | Launcher that runs `discolike-cli` at the version pinned in `bin/cli-version` through `uvx`                                                                              |
-| `hooks/approve-skills.sh`           | Auto-approves this plugin's own skills and `WebFetch` of `docs.discolike.com`, `api.discolike.com`, and the Discolike GitHub org in Claude Code; other URLs still prompt |
+| Piece                               | Purpose                                                                                                                                                                    |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `skills/discolike/`                 | Entry-point skill plus `flows.md`, `troubleshooting.md`, `discogen.md`, loaded on demand                                                                                   |
+| `skills/setup/`, `skills/feedback/` | Connect and report                                                                                                                                                         |
+| `bin/discolike`                     | Launcher that runs `discolike-cli` at the version pinned in `bin/cli-version` through `uvx`                                                                                |
+| `hooks/approve-skills.sh`           | Optional PreToolUse hook that auto-approves this plugin's skills and `WebFetch` of DiscoLike hosts; not registered by the plugin, wire it into your own settings to use it |
 
 Run the hook and launcher tests with `npm test` (or `sh hooks/test-approve-skills.sh` and `sh hooks/test-launcher.sh`).
 
