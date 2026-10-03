@@ -29,7 +29,7 @@ The GTM search engine for the business web, one workflow for Claude Code, Codex,
 
 ---
 
-DiscoLike is a search engine over **80M+ business websites worldwide**, analyzed in **50 languages** — roughly **3x the coverage of LinkedIn-dependent databases**. It ranks companies by what they actually do on the web, so it reaches niche verticals, local businesses, and non-English markets that other B2B data sources miss.
+DiscoLike is a search engine over **80M+ business websites worldwide**, analyzed in **55 languages** — roughly **3x the coverage of LinkedIn-dependent databases**. It ranks companies by what they actually do on the web, so it reaches niche verticals, local businesses, and non-English markets that other B2B data sources miss.
 
 This repo ships the `discolike` plugin: the [`discolike`](skills/discolike/SKILL.md) skill with its flow, troubleshooting, and DiscoGen references, `setup` and `feedback` skills, and a pinned `discolike` CLI launcher. Shell commands go through the client's normal permission prompt. The main skill gives a coding agent the operating knowledge to use DiscoLike well: which access mode to pick, how to open an account without a browser, how to search without wasting credits, and the end-to-end flows for the jobs people actually ask for — target account lists, lookalikes, CRM enrichment, ICP segmentation, and contact discovery.
 
