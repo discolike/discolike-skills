@@ -10,7 +10,6 @@
   "privacyPolicyUrl": "https://discolike.com/privacy-policy/",
   "repository": "https://github.com/Discolike/discolike-skills",
   "license": "MIT",
-  "icon": "./assets/discolike-icon.png",
   "keywords": [
     "mcp",
     "b2b-data",
