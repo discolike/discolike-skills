@@ -4,8 +4,9 @@
 
 - Claude Code plugin no longer auto-approves its skills or `WebFetch` of DiscoLike hosts; both go through the normal permission prompt. The approval hook script and its tests are removed.
 - Claude plugin manifest declares the privacy policy and terms of service URLs, and the plugin ships a listing icon.
-- Launcher moved from `bin/` to `scripts/`: claude.ai and Cowork refuse plugins with a top-level `bin/`. Claude Code no longer puts `discolike` on PATH by itself; the `setup` skill does, as it already did for other clients.
-- Launcher points to the uv install docs instead of printing a download-and-run command.
+- The plugin no longer ships the pinned CLI launcher, so it runs no local code. `setup` asks the user to install `discolike-cli` 0.4.1 or later themselves.
+- `feedback` hands the user a prefilled GitHub issue link instead of filing through `gh`.
+- README lists every service the plugin talks to and what it sends.
 
 ## 1.0.1 - 2026-09-30
 

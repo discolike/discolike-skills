@@ -29,16 +29,10 @@ Write the title and body. Strip API keys, emails of third parties, and full resu
 
 ## 4. File it
 
-With the GitHub CLI signed in (`gh auth status` exit 0), write the confirmed title and body to two files with the file-writing tool, never by echoing them through the shell, then hand `gh` the files. The text never touches shell syntax, so quotes, `$(...)`, and backticks in a bug report stay literal:
-
-```bash
-gh issue create --repo Discolike/<repo> --title "$(cat issue-title.txt)" --body-file issue-body.md --label "<bug|feedback>"
-```
-
-Without `gh`, print a prefilled link for the user to open:
+Do not file the issue yourself. URL-encode the confirmed title and body into a prefilled link and give it to the user to open and submit:
 
 ```
-https://github.com/Discolike/<repo>/issues/new?title=<url-encoded title>&body=<url-encoded body>
+https://github.com/Discolike/<repo>/issues/new?title=<url-encoded title>&body=<url-encoded body>&labels=<bug|feedback>
 ```
 
-Relay the issue URL. For account or billing matters that should not be public, point the user to support@discolike.com instead.
+Once they submit, nothing else is needed. For account or billing matters that should not be public, point the user to support@discolike.com instead.

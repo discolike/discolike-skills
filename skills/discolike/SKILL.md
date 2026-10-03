@@ -32,7 +32,7 @@ Read a file when its row applies; do not load all three up front.
 ## Pick the access mode
 
 1. **MCP server** if the client supports remote MCP (Claude Code, Claude Desktop, Codex, Cursor, VS Code, Windsurf). URL `https://api.discolike.com/v1/mcp`, OAuth 2.1, no key to manage. Tools appear in the client after one browser authorization. Install snippets: https://discolike.com/mcp.md
-2. **CLI** when shelling out. The plugin bundles a pinned launcher at `scripts/discolike`; the `setup` skill puts it on PATH. Without the plugin, ask the user to install it (`pip install discolike-cli`); do not install packages yourself. Sign in with `discolike auth login` (browser OAuth). With an API key, the user sets `DISCOLIKE_API_KEY` in their own shell or runs `discolike auth login --api-key` themselves; never ask for the key in chat. Always pass `--format json`. `discolike --help` prints the output contract and exit codes.
+2. **CLI** when shelling out. Ask the user to install it (`pip install discolike-cli`, 0.4.1 or later); do not install packages yourself. The `setup` skill walks through it. Sign in with `discolike auth login` (browser OAuth). With an API key, the user sets `DISCOLIKE_API_KEY` in their own shell or runs `discolike auth login --api-key` themselves; never ask for the key in chat. Always pass `--format json`. `discolike --help` prints the output contract and exit codes.
 3. **Python SDK** when writing a script. The user adds the `discolike` package to their project; `Discolike()` reads `DISCOLIKE_API_KEY`. Reference: https://docs.discolike.com/sdk/reference/
 4. **REST** as last resort: `GET https://api.discolike.com/v1/discover`, header `X-API-Key`. OpenAPI at https://api.discolike.com/v1/openapi.json. Auth summary: https://discolike.com/auth.md
 
@@ -102,7 +102,7 @@ companies = client.discover(DiscoverParams(domain=["stripe.com", "adyen.com"], e
 
 ## Related skills
 
-- `setup`: install the pinned CLI launcher, sign in, verify the connection.
+- `setup`: get the CLI installed, sign in, verify the connection.
 - `feedback`: file a bug or product feedback with the DiscoLike team.
 
 ## Pointers

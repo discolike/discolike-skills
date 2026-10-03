@@ -111,7 +111,7 @@ New account, no ICP written down, or "set up my ICP".
 6. **Rate.** Discover and contacts are 10 calls a minute on Pro, so a slice of 2,000 domains at 5 per company is roughly 100,000 contacts an hour. Run one call at a time; parallel calls only trade rate-limit retries for speed. `discolike bulk` keeps one call in flight under `--rate-limit` (default 10 per minute; Starter 5, Team 15, Company 25, Enterprise 50) and retries on 429 and 5xx.
 7. **Gaps.** Companies with no directory contacts go through ContaGen and the email finder, Flow 1 steps 5 and 6 (or step 5 alone with `find_emails`), 10,000 domains per ContaGen call, 500 names per email batch.
 
-Use the CLI for this flow. `discolike bulk` prints progress on stderr and one JSON summary on stdout, validates every request against the SDK model before the first billable call (a typo exits 2 with no spend), and manages the paging fields (`max_records`, `offset`, `exclude_domain`, `domain`, `results_by_company`, `max_companies`); a supplied value for one of those is dropped with a note. Any other filter goes through `--param` or `--params-file`. Only fall back to an SDK script when the pinned CLI is older than 0.4.0.
+Use the CLI for this flow. `discolike bulk` prints progress on stderr and one JSON summary on stdout, validates every request against the SDK model before the first billable call (a typo exits 2 with no spend), and manages the paging fields (`max_records`, `offset`, `exclude_domain`, `domain`, `results_by_company`, `max_companies`); a supplied value for one of those is dropped with a note. Any other filter goes through `--param` or `--params-file`. Only fall back to an SDK script when the installed CLI is older than 0.4.0.
 
 ### Replicating a search from the app
 

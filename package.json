@@ -4,9 +4,7 @@
   "private": true,
   "scripts": {
     "format": "prettier --write \"**/*.md\"",
-    "format:check": "prettier --check \"**/*.md\"",
-    "test": "sh hooks/test-launcher.sh",
-    "test:live": "sh hooks/test-launcher-live.sh"
+    "format:check": "prettier --check \"**/*.md\""
   },
   "devDependencies": {
     "prettier": "3.6.2"

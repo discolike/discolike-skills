@@ -1,6 +1,6 @@
 ---
 name: setup
-description: DiscoLike setup — connect the agent to DiscoLike. Use when no DiscoLike MCP tools are visible and `discolike` is not on PATH, when `discolike auth status` or `account usage` fails on auth, when the CLI on PATH is older than the plugin's pinned version, or when the user asks to set up, connect, or log in to DiscoLike. Signs in, or opens an account when there is none.
+description: DiscoLike setup — connect the agent to DiscoLike. Use when no DiscoLike MCP tools are visible and `discolike` is not on PATH, when `discolike auth status` or `account usage` fails on auth, when the CLI on PATH is older than 0.4.1, or when the user asks to set up, connect, or log in to DiscoLike. Signs in, or opens an account when there is none.
 allowed-tools: Read, AskUserQuestion
 ---
 
@@ -20,35 +20,27 @@ discolike auth status; echo "exit_code=$?"
 
 Read the exit code and the JSON, not any prose.
 
-- **exit_code=0** with `"valid": true`: signed in. Go to step 3 to confirm the version, then stop.
+- **exit_code=0** with `"valid": true`: signed in. Run `discolike --version`; at 0.4.1 or later, stop. Older, go to step 3.
 - **exit_code=3**: a credential is missing or rejected. Go to step 4.
 - **command not found**: go to step 3.
 - **exit_code=5**: network. Say so and stop; nothing here fixes that.
 
-## 3. Put the pinned launcher on PATH
+## 3. Install or upgrade the CLI
 
-The plugin bundles `scripts/discolike`, a launcher that runs `discolike-cli` at the version in `scripts/cli-version` through `uvx`. Resolve the plugin root: `$CLAUDE_PLUGIN_ROOT` when the harness exports it, otherwise two levels above this skill's directory. On first run the launcher downloads that pinned `discolike-cli` from PyPI, so tell the user and run it only after they say yes.
+The skills need `discolike-cli` 0.4.1 or later. Do not install packages yourself; ask the user to run one of these in their own terminal:
 
 ```bash
-"<PLUGIN_ROOT>/scripts/discolike" --version; echo "exit_code=$?"
+pip install --upgrade discolike-cli
+uv tool install discolike-cli   # or: uv tool upgrade discolike-cli
 ```
 
-- **exit_code=5** with `uv is not installed`: ask the user to install uv (https://docs.astral.sh/uv/getting-started/installation/), then rerun.
-- **exit_code=0**: the launcher works. Compare its version against whatever bare `discolike` reports:
+Then confirm:
 
-  ```bash
-  discolike --version 2>/dev/null; cat "<PLUGIN_ROOT>/scripts/cli-version"
-  ```
+```bash
+discolike --version; echo "exit_code=$?"
+```
 
-  If bare `discolike` is a standalone install older than the pin, the user can upgrade it themselves (`pip install --upgrade discolike-cli` or `uv tool upgrade discolike-cli`). Rerun `discolike --version` afterwards; once it is at or above the pin, keep using it and skip the PATH step below.
-
-  If bare `discolike` is still missing or older than the pin, add the launcher to PATH for this session and for future shells. Tell the user which file you are editing before you edit it:
-
-  ```bash
-  export PATH="<PLUGIN_ROOT>/scripts:$PATH"
-  ```
-
-  For a persistent PATH, append the same `export` line to `~/.zshrc` or `~/.bashrc` only with the user's yes. Until a new shell starts, use the launcher's absolute path in place of `discolike` in every command from any DiscoLike skill.
+At 0.4.1 or later, go back to step 2. `command not found` right after installing means the install's script directory is not on PATH in this shell; have the user open a new shell.
 
 ## 4. Sign in, or open an account
 
@@ -84,8 +76,7 @@ Report the plan and remaining quota in one sentence. Then return to whatever the
 
 | Symptom                                     | Cause                                              | Fix                                                                 |
 | ------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------- |
-| `discolike: command not found` after step 3 | PATH edit not in this shell                        | Use the launcher's absolute path, or open a new shell               |
+| `discolike: command not found` after step 3 | Install directory not on PATH in this shell        | Open a new shell                                                    |
 | `auth status` exit 3 right after login      | Expired OAuth session                              | `discolike auth logout`, then `discolike auth login`                |
 | Browser never opens                         | Headless or SSH session                            | `discolike auth login --no-browser --port <n>` and forward the port |
 | MCP tools missing after adding the server   | Client needs a restart, or OAuth was not completed | Restart the client, retry the authorization                         |
-| `exit_code=5` from the launcher             | `uv` missing                                       | Install uv, rerun                                                   |
