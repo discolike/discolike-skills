@@ -62,7 +62,7 @@ Clone this repository into the project or install it as a plugin where the clien
 
 | Client         | Included integration                                            | How it activates                                                                                                                |
 | -------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Claude Code    | `.claude-plugin/` plus `CLAUDE.md`                              | Install from the Claude marketplace, or open the repo as a project.                                                             |
+| Claude Code    | `.claude-plugin/` plus `.claude/CLAUDE.md`                      | Install from the Claude marketplace, or open the repo as a project.                                                             |
 | Codex          | `.codex-plugin/plugin.json` plus `AGENTS.md`                    | Install the plugin from a marketplace that contains this repo, or open the repo; `AGENTS.md` routes matching work to the skill. |
 | Cursor         | `.cursor-plugin/plugin.json` plus `.cursor/rules/discolike.mdc` | Install from the Cursor Marketplace, or open or copy the repository rule into a Cursor project.                                 |
 | Gemini CLI     | `gemini-extension.json` plus `GEMINI.md`                        | `gemini extensions install https://github.com/Discolike/discolike-skills`, or open the repo or copy the file into a project.    |
