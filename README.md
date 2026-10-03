@@ -116,6 +116,19 @@ Each flow in the skill lists the MCP tool, the CLI command, and the SDK call sid
 | Technology and infrastructure targeting    | Find companies by the vendors and stack they run                                                                     |
 | Rank or filter a list the user already has | Score an existing list against an ICP instead of discovering new companies                                           |
 
+## Data and privacy
+
+The plugin talks to these services, and only these:
+
+| Service                               | When                                                          | What is sent                                                                    |
+| ------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `api.discolike.com`                   | Every MCP, CLI, SDK, or REST call, and account signup         | Search filters, domains, uploaded lists, and the email and name given at signup |
+| GitHub (`github.com`)                 | `feedback` skill, only after the user approves the exact text | The issue title and body, filed as a public issue in a `Discolike` repository   |
+| PyPI (`pypi.org`)                     | First run of the CLI launcher, after the user says yes        | A package download request for the pinned `discolike-cli`; no user data         |
+| `discolike.com`, `docs.discolike.com` | When the agent reads DiscoLike documentation                  | Page requests; no user data                                                     |
+
+Results that include contacts (names, emails) are written to local files the agent creates, and saved queries and exclusion lists are stored in the user's DiscoLike account. See the [privacy policy](https://discolike.com/privacy-policy/) for retention.
+
 ## Related
 
 - **MCP server**: [discolike.com/mcp](https://discolike.com/mcp/) — hosted, OAuth 2.1, install snippets for every major client
