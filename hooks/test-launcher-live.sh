@@ -1,14 +1,14 @@
 #!/bin/sh
-# Live check for bin/cli-version: runs the real launcher against PyPI in a fresh
+# Live check for scripts/cli-version: runs the real launcher against PyPI in a fresh
 # uv cache, so the pinned CLI resolves its dependencies the way a new install
 # does. Needs network and uv. Run after every version bump: npm run test:live
 set -eu
 root="$(cd "$(dirname "$0")/.." && pwd)"
-expected="$(tr -d '[:space:]' < "$root/bin/cli-version")"
+expected="$(tr -d '[:space:]' < "$root/scripts/cli-version")"
 cache="$(mktemp -d)"
 trap 'rm -rf "$cache"' EXIT
 
-out="$(UV_CACHE_DIR="$cache" "$root/bin/discolike" --version 2>&1)" || {
+out="$(UV_CACHE_DIR="$cache" "$root/scripts/discolike" --version 2>&1)" || {
   printf 'FAIL pinned discolike-cli %s does not start:\n%s\n' "$expected" "$out"
   exit 1
 }

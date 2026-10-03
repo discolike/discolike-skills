@@ -27,17 +27,17 @@ Read the exit code and the JSON, not any prose.
 
 ## 3. Put the pinned launcher on PATH
 
-The plugin bundles `bin/discolike`, a launcher that runs `discolike-cli` at the version in `bin/cli-version` through `uvx`. Resolve the plugin root: `$CLAUDE_PLUGIN_ROOT` when the harness exports it, otherwise two levels above this skill's directory. On first run the launcher downloads that pinned `discolike-cli` from PyPI, so tell the user and run it only after they say yes.
+The plugin bundles `scripts/discolike`, a launcher that runs `discolike-cli` at the version in `scripts/cli-version` through `uvx`. Resolve the plugin root: `$CLAUDE_PLUGIN_ROOT` when the harness exports it, otherwise two levels above this skill's directory. On first run the launcher downloads that pinned `discolike-cli` from PyPI, so tell the user and run it only after they say yes.
 
 ```bash
-"<PLUGIN_ROOT>/bin/discolike" --version; echo "exit_code=$?"
+"<PLUGIN_ROOT>/scripts/discolike" --version; echo "exit_code=$?"
 ```
 
 - **exit_code=5** with `uv is not installed`: ask the user to install uv (https://docs.astral.sh/uv/getting-started/installation/), then rerun.
 - **exit_code=0**: the launcher works. Compare its version against whatever bare `discolike` reports:
 
   ```bash
-  discolike --version 2>/dev/null; cat "<PLUGIN_ROOT>/bin/cli-version"
+  discolike --version 2>/dev/null; cat "<PLUGIN_ROOT>/scripts/cli-version"
   ```
 
   If bare `discolike` is a standalone install older than the pin, the user can upgrade it themselves (`pip install --upgrade discolike-cli` or `uv tool upgrade discolike-cli`). Rerun `discolike --version` afterwards; once it is at or above the pin, keep using it and skip the PATH step below.
@@ -45,7 +45,7 @@ The plugin bundles `bin/discolike`, a launcher that runs `discolike-cli` at the 
   If bare `discolike` is still missing or older than the pin, add the launcher to PATH for this session and for future shells. Tell the user which file you are editing before you edit it:
 
   ```bash
-  export PATH="<PLUGIN_ROOT>/bin:$PATH"
+  export PATH="<PLUGIN_ROOT>/scripts:$PATH"
   ```
 
   For a persistent PATH, append the same `export` line to `~/.zshrc` or `~/.bashrc` only with the user's yes. Until a new shell starts, use the launcher's absolute path in place of `discolike` in every command from any DiscoLike skill.

@@ -1,6 +1,6 @@
 #!/bin/sh
-# Tests for bin/discolike, the pinned CLI launcher. Run: sh hooks/test-launcher.sh
-# Uses a scratch copy of bin/ and stub uvx/uv binaries on a controlled PATH, so
+# Tests for scripts/discolike, the pinned CLI launcher. Run: sh hooks/test-launcher.sh
+# Uses a scratch copy of scripts/ and stub uvx/uv binaries on a controlled PATH, so
 # no network and no real CLI are involved.
 set -u
 root="$(cd "$(dirname "$0")/.." && pwd)"
@@ -12,7 +12,7 @@ ko() { failed=$((failed + 1)); printf 'FAIL %s\n' "$1"; }
 
 fresh() { # fresh <version-file-content or "-" for none>
   rm -rf "$tmp/bin" "$tmp/stubs" "$tmp"/*.args; mkdir -p "$tmp/bin" "$tmp/stubs"
-  cp "$root/bin/discolike" "$tmp/bin/discolike"; chmod +x "$tmp/bin/discolike"
+  cp "$root/scripts/discolike" "$tmp/bin/discolike"; chmod +x "$tmp/bin/discolike"
   [ "$1" = "-" ] || printf '%s' "$1" > "$tmp/bin/cli-version"
 }
 stub() { # stub <name>: records argv to $tmp/<name>.args and exits 0
@@ -61,7 +61,7 @@ fresh "1.2.3"; stub uvx
 [ "$code" -eq 0 ] && grep -q 'discolike-cli==1.2.3' "$tmp/uvx.args" && ok || ko "bare-name resolution exit=$code"
 
 # 8. Envelope stays valid JSON when the message carries quotes (path with a quote).
-q="$tmp/we\"ird"; mkdir -p "$q/bin"; cp "$root/bin/discolike" "$q/bin/discolike"; chmod +x "$q/bin/discolike"
+q="$tmp/we\"ird"; mkdir -p "$q/bin"; cp "$root/scripts/discolike" "$q/bin/discolike"; chmod +x "$q/bin/discolike"
 PATH="$base_path" "$q/bin/discolike" --version 2> "$tmp/err"; code=$?
 [ "$code" -eq 1 ] && jq -e '.code == "internal_error"' < "$tmp/err" > /dev/null && ok || ko "quote escaping: $(cat "$tmp/err")"
 
