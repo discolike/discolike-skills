@@ -6,9 +6,9 @@ set -u
 root="$(cd "$(dirname "$0")/.." && pwd)"
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
-pass=0; fail=0
-ok() { pass=$((pass + 1)); }
-ko() { fail=$((fail + 1)); printf 'FAIL %s\n' "$1"; }
+passed=0; failed=0
+ok() { passed=$((passed + 1)); }
+ko() { failed=$((failed + 1)); printf 'FAIL %s\n' "$1"; }
 
 fresh() { # fresh <version-file-content or "-" for none>
   rm -rf "$tmp/bin" "$tmp/stubs" "$tmp"/*.args; mkdir -p "$tmp/bin" "$tmp/stubs"
@@ -65,5 +65,5 @@ q="$tmp/we\"ird"; mkdir -p "$q/bin"; cp "$root/bin/discolike" "$q/bin/discolike"
 PATH="$base_path" "$q/bin/discolike" --version 2> "$tmp/err"; code=$?
 [ "$code" -eq 1 ] && jq -e '.code == "internal_error"' < "$tmp/err" > /dev/null && ok || ko "quote escaping: $(cat "$tmp/err")"
 
-printf '%d passed, %d failed\n' "$pass" "$fail"
-[ "$fail" -eq 0 ]
+printf '%d passed, %d failed\n' "$passed" "$failed"
+[ "$failed" -eq 0 ]

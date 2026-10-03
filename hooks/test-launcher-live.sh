@@ -1,7 +1,7 @@
 #!/bin/sh
 # Live check for bin/cli-version: runs the real launcher against PyPI in a fresh
 # uv cache, so the pinned CLI resolves its dependencies the way a new install
-# does. Needs network and uv. Run after every pin bump: npm run test:live
+# does. Needs network and uv. Run after every version bump: npm run test:live
 set -eu
 root="$(cd "$(dirname "$0")/.." && pwd)"
 expected="$(tr -d '[:space:]' < "$root/bin/cli-version")"
