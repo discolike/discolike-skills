@@ -8,6 +8,8 @@
     "email": "support@discolike.com"
   },
   "homepage": "https://discolike.com/mcp/",
+  "documentationUrl": "https://docs.discolike.com",
+  "supportUrl": "https://github.com/Discolike/discolike-skills/issues",
   "privacyPolicyUrl": "https://discolike.com/privacy-policy/",
   "termsOfServiceUrl": "https://discolike.com/terms-of-service/",
   "repository": "https://github.com/Discolike/discolike-skills",
