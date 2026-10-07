@@ -18,7 +18,7 @@ Requires a paid plan from $99/month. There is no free tier. Counting results is 
 | `troubleshooting.md` | Results look noisy, counts do not add up, or the user says "these are wrong".                                                                                                                             |
 | `discogen.md`        | The question is research, not a filter ("do they sell to hospitals?", "estimated ad spend?").                                                                                                             |
 | `flows.md` Flow 10   | The user wants everything that matches, tens of thousands of companies or 100,000+ contacts, or asks to replicate an app search over the API.                                                             |
-| `flows.md` Flow 11   | The user wants a chat-driven prospecting run instead of a hand-tuned discover call (once that release ships), including check-in behavior at pauses and big-list targets.                                 |
+| `flows.md` Flow 11   | The user wants a chat-driven prospecting run instead of a hand-tuned discover call, including check-in behavior at pauses and big-list targets.                                 |
 
 Read a file when its row applies; do not load all three up front.
 
@@ -74,7 +74,7 @@ Always set `variance` explicitly on API, CLI, and SDK calls (`MEDIUM` is the app
 
 - Contacts at the matched companies: contacts search with a persona description, seniority, or department. Returns email, phone, LinkedIn. Emails are pattern-derived unless `email_validated` is set, which keeps only addresses we have verified.
 - Enrich a list you already have: bizdata, vendors, growth, score, redirects, subsidiaries per domain, or bulk append from CSV.
-- Find lookalikes of a customer list segment by segment: once the prospecting release ships, a prospecting run with `customer_domains` groups the customers and expands each group (Flow 11); until then, segment and run lookalikes per cluster by hand (Flow 4).
+- Find lookalikes of a customer list segment by segment: a prospecting run with `customer_domains` groups the customers and expands each group (Flow 11). Segment and run lookalikes per cluster by hand (Flow 4) only when the user wants to review clusters before any search.
 - Validate a list against an ICP description: fit yes/no with a confidence level and reasoning per domain.
 - Push to HubSpot, Salesforce, Pipedrive via the CRM tools.
 
