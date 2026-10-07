@@ -3,6 +3,7 @@
 ## 1.1.0 - 2026-10-06
 
 - Flow 11: agentic prospecting runs (start, wait, approve, answer checkpoints, seeded runs, big-list targets, `saved_query_ids`, `chat_closed`). MCP and REST now; SDK and CLI calls need `discolike-cli` 0.5.0 or later.
+- Flow 11 covers the `top_up` and `contacts_review` checkpoints and answering with `question_seq`, which "Find emails" requires.
 - Flow 11 covers seeded runs (`customer_domains`, segment selection, results segments); Flow 4 points to it.
 - Claude Code plugin no longer auto-approves its skills or `WebFetch` of DiscoLike hosts; both go through the normal permission prompt. The approval hook script and its tests are removed.
 - Claude plugin manifest declares the privacy policy and terms of service URLs, and the plugin ships a listing icon.
