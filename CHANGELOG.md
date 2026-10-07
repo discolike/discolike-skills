@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.0 - 2026-10-06
+## 1.1.0 - 2026-10-07
 
 - Flow 11: agentic prospecting runs (start, wait, approve, answer checkpoints, seeded runs, big-list targets, `saved_query_ids`, `chat_closed`). MCP and REST now; SDK and CLI calls need `discolike-cli` 0.5.0 or later.
 - Flow 11 covers the `top_up` and `contacts_review` checkpoints and answering with `question_seq`, which "Find emails" requires.
