@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1 - 2026-10-07
+
+- Contacts search returns every email unverified (`email_validated` is null), and the `email_validated` filter is deprecated and ignored. The skill no longer suggests it; it points to `has_email`, the email finder, and the in-app Verify button instead.
+
 ## 1.1.0 - 2026-10-07
 
 - Flow 11: agentic prospecting runs (start, wait, approve, answer checkpoints, seeded runs, big-list targets, `saved_query_ids`, `chat_closed`). MCP and REST now; SDK and CLI calls need `discolike-cli` 0.5.0 or later.

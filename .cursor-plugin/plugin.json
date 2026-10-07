@@ -1,6 +1,6 @@
 {
   "name": "discolike",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Company search for agents: find target accounts, firmographics, technographics, and contacts across 80M+ business websites via the DiscoLike MCP server, CLI, or Python SDK.",
   "author": {
     "name": "DiscoLike",
