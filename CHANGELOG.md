@@ -2,7 +2,7 @@
 
 ## 1.1.1 - 2026-10-07
 
-- Contacts search returns every email unverified (`email_validated` is null), and the `email_validated` filter is deprecated and ignored. The skill no longer suggests it; it points to `has_email`, the email finder, and the in-app Verify button instead.
+- Contacts search returns every email unverified (`email_validated` is null), and the `email_validated` filter is deprecated and now only means `has_email`. The skill no longer suggests it; it points to `has_email`, the email finder, and the in-app Verify button instead.
 
 ## 1.1.0 - 2026-10-07
 
