@@ -72,7 +72,7 @@ Always set `variance` explicitly on API, CLI, and SDK calls (`MEDIUM` is the app
 
 ## After discovery
 
-- Contacts at the matched companies: contacts search with a persona description, seniority, or department. Returns email, phone, LinkedIn. Emails are pattern-derived unless `email_validated` is set, which keeps only addresses we have verified.
+- Contacts at the matched companies: contacts search with a persona description, seniority, or department. Returns email, phone, LinkedIn. Every email comes back unverified (`email_validated` is null). The `email_validated` filter is deprecated and ignored, so do not set it; use `has_email` to require an address. For a proven address, run the names through the email finder (`flows.md` Flow 1 step 6); verifying an address the user already has is the in-app Verify button only.
 - Enrich a list you already have: bizdata, vendors, growth, score, redirects, subsidiaries per domain, or bulk append from CSV.
 - Find lookalikes of a customer list segment by segment: a prospecting run with `customer_domains` groups the customers and expands each group (Flow 11). Segment and run lookalikes per cluster by hand (Flow 4) only when the user wants to review clusters before any search.
 - Validate a list against an ICP description: fit yes/no with a confidence level and reasoning per domain.
