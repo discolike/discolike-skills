@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- `country` takes continent codes (`EUROPE`, `ASIA`, `AFRICA`, `NORTH_AMERICA`, `SOUTH_AMERICA`, `OCEANIA`, `ANTARCTICA`); `EU` means the 27 member states only.
+
 ## 1.1.1 - 2026-10-07
 
 - Contacts search returns every email unverified (`email_validated` is null), and the `email_validated` filter is deprecated and now only means `has_email`. The skill no longer suggests it; it points to `has_email`, the email finder, and the in-app Verify button instead.
