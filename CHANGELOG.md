@@ -3,6 +3,7 @@
 ## Unreleased
 
 - `country` takes continent codes (`EUROPE`, `ASIA`, `AFRICA`, `NORTH_AMERICA`, `SOUTH_AMERICA`, `OCEANIA`, `ANTARCTICA`); `EU` means the 27 member states only.
+- Flow 11: MCP prospecting runs pause for the user instead of spending on emails alone. Poll `get-prospecting-run`, relay its `question` (and the email `estimate` at a contacts review), and send the user's answer with `answer-prospecting`; MCP runs no longer need REST, SDK, CLI, or the web app to resume.
 
 ## 1.1.1 - 2026-10-07
 
