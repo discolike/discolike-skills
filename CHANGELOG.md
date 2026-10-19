@@ -3,6 +3,7 @@
 ## Unreleased
 
 - `country` takes continent codes (`EUROPE`, `ASIA`, `AFRICA`, `NORTH_AMERICA`, `SOUTH_AMERICA`, `OCEANIA`, `ANTARCTICA`); `EU` means the 27 member states only.
+- Discover takes `relevance` (`MAX_RELEVANCE`, `BALANCED`, `MAX_COVERAGE`) to stop where estimated ICP fit drops too low; the skill defaults to `BALANCED` for market mapping. `variance` is deprecated; old values map onto `relevance`, and the skill no longer sets it.
 
 ## 1.1.1 - 2026-10-07
 
