@@ -68,7 +68,7 @@ Three ways to describe the target, all on the same `discover` call. Combine them
 
 Each search bills a query fee plus a fee per 1,000 new records. Records seen in the last 90 days are free. Results cap at 10,000 per call: 10,000 is a page size, not a total. For more, put what you have into an exclusion list and run the next call with `exclusion_query_id`, and keep turning pages until the results run dry; `discolike bulk companies` runs that loop (`flows.md` Flow 10). Exclusion lists hold up to 250,000 domains and 500,000 contacts on every plan. `max_records` has a floor of 20. Contacts pulled per domain list have no 10,000 ceiling; page them by slicing the domain list, since `offset` is ignored when `results_by_company` is set.
 
-Always set `variance` explicitly on API, CLI, and SDK calls (`MEDIUM` is the app default; the API default `UNRESTRICTED` turns the industry-drift guard off).
+Set `relevance` on discover (MCP, API, CLI, SDK) to stop the ranked list once estimated ICP fit drops too low: `BALANCED` by default for mapping a market, `MAX_RELEVANCE` when the user wants only the closest matches, `MAX_COVERAGE` when they want the whole market and accept a borderline tail. Leaving it out means no automatic stop. An empty later page means the search reached the edge of the market. `variance` is deprecated; old values map onto `relevance`.
 
 ## After discovery
 
@@ -86,8 +86,8 @@ CLI:
 
 ```bash
 discolike count --phrase-match "managed detection and response" --country DE
-discolike discover --domain stripe.com --domain adyen.com --employee-range 51,500 --variance MEDIUM --max-records 500 --format json
-discolike discover --icp-prompt "cybersecurity for SMBs, managed IT, endpoint protection" --country US --variance MEDIUM --max-records 100 --format json
+discolike discover --domain stripe.com --domain adyen.com --employee-range 51,500 --param relevance=BALANCED --max-records 500 --format json
+discolike discover --icp-prompt "cybersecurity for SMBs, managed IT, endpoint protection" --country US --param relevance=MAX_RELEVANCE --max-records 100 --format json
 ```
 
 Python:
@@ -98,7 +98,7 @@ from discolike.requests import DiscoverParams, CountParams
 
 client = Discolike()
 n = client.count(CountParams(phrase_match=["managed detection and response"], country=["DE"])).count
-companies = client.discover(DiscoverParams(domain=["stripe.com", "adyen.com"], employee_range="51,500", variance="MEDIUM", max_records=500))
+companies = client.discover(DiscoverParams(domain=["stripe.com", "adyen.com"], employee_range="51,500", relevance="BALANCED", max_records=500))
 ```
 
 ## Related skills
