@@ -4,6 +4,7 @@
 
 - `country` takes continent codes (`EUROPE`, `ASIA`, `AFRICA`, `NORTH_AMERICA`, `SOUTH_AMERICA`, `OCEANIA`, `ANTARCTICA`); `EU` means the 27 member states only.
 - Flow 11: MCP prospecting runs pause for the user instead of spending on emails alone. Poll `get-prospecting-run`, relay its `question` (and the email `estimate` at a contacts review), and send the user's answer with `answer-prospecting`; MCP runs no longer need REST, SDK, CLI, or the web app to resume.
+- Discover takes `relevance` (`MAX_RELEVANCE`, `BALANCED`, `MAX_COVERAGE`) to stop where estimated ICP fit drops too low; the skill defaults to `BALANCED` for market mapping. `variance` is deprecated; old values map onto `relevance`, and the skill no longer sets it.
 
 ## 1.1.1 - 2026-10-07
 
