@@ -8,7 +8,7 @@ allowed-tools: Read, Grep
 
 DiscoLike is a search engine over 80M+ crawled business websites. It returns companies ranked by what they actually do on the web, including niche verticals and non-English markets. Every domain is re-validated by SSL certificate about every 30 days, so results never contain dead or parked domains and none are billed. Every record carries firmographics; contacts, technographics, growth metrics, enrichment, segmentation, and CRM push are one more call away.
 
-Requires a paid plan from $99/month. There is no free tier. Counting results is free.
+Requires a paid plan. Counting results is free.
 
 ## Files in this skill
 
@@ -16,18 +16,17 @@ Requires a paid plan from $99/month. There is no free tier. Counting results is 
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `flows.md`           | Running any end-to-end job: target list, CRM enrichment, name-to-domain matching, ICP segmentation, market map, ICP from a website, signal qualification, tech-stack targeting, scoring an existing list. |
 | `troubleshooting.md` | Results look noisy, counts do not add up, or the user says "these are wrong".                                                                                                                             |
-| `discogen.md`        | The question is research, not a filter ("do they sell to hospitals?", "estimated ad spend?").                                                                                                             |
 | `flows.md` Flow 10   | The user wants everything that matches, tens of thousands of companies or 100,000+ contacts, or asks to replicate an app search over the API.                                                             |
 | `flows.md` Flow 11   | The user wants a chat-driven prospecting run instead of a hand-tuned discover call, including check-in behavior at pauses and big-list targets.                                                           |
 
-Read a file when its row applies; do not load all three up front.
+Read a file when its row applies; do not load both up front. A question that no filter or signal answers ("do they sell to hospitals?", "estimated ad spend?") is research: use the deterministic signals in `flows.md` Flow 7 first, and if the question still needs research, tell the user DiscoLike's web app and REST API cover it.
 
 ## How to work
 
 - **Confirm the account once.** First DiscoLike call in a session: MCP `account-status`, CLI `discolike account usage`, or SDK `client.account.usage()`. Tell the user the plan and remaining quota in one line. If it fails on auth, run the `setup` skill.
 - **Narrate, then summarize.** Say what you are about to run and why; turn JSON into a count, a short table, or a sentence. Raw output only on request. Write full result sets to disk as JSON or CSV; chat output truncates.
 - **Position it as DiscoLike's product.** "DiscoLike lets you…", "you can…". Not "skills I have".
-- **Spend rule.** Counting is free; discovery, contacts, and enrichment bill per new record. Before any paid pull larger than a sample (about 100 records), state the estimated cost from the count and the plan's per-1,000 rate and get a yes. Reuse that approval for the same scope; ask again only if the scope or estimate grows. Do not volunteer the balance otherwise.
+- **Spend rule.** Counting is free; discovery, contacts runs, and enrichment use the plan's quota. Before any paid pull larger than a sample (about 100 records), tell the user the size from the count and get a yes. A contacts run returns its own estimate for each step: relay it and get a yes before running that step. Reuse that approval for the same scope; ask again only if the scope or estimate grows. Do not volunteer the balance otherwise.
 - **Plain CLI calls.** One `discolike` command at a time, `--format json`, optionally piped to `jq`.
 
 ## Pick the access mode
@@ -66,16 +65,17 @@ Three ways to describe the target, all on the same `discover` call. Combine them
 | Size the set         | `count` with the same filters                                                                                                            | Free. Do this before a large `discover`. It sizes the hard market definition, not the lookalike ranking: it takes no seed `domain` and no ICP description, and defaults `exclude_leadgen` to false where `discover` defaults it to true, so it reads higher than the pull that follows. Pass `exclude_leadgen=true` to compare like with like. |
 | Cap spend            | `max_records`                                                                                                                            | Start with 100 to 500 to check fit, then scale.                                                                                                                                                                                                                                                                                                |
 
-Each search bills a query fee plus a fee per 1,000 new records. Records seen in the last 90 days are free. Results cap at 10,000 per call: 10,000 is a page size, not a total. For more, put what you have into an exclusion list and run the next call with `exclusion_query_id`, and keep turning pages until the results run dry; `discolike bulk companies` runs that loop (`flows.md` Flow 10). Exclusion lists hold up to 250,000 domains and 500,000 contacts on every plan. `max_records` has a floor of 20. Contacts pulled per domain list have no 10,000 ceiling; page them by slicing the domain list, since `offset` is ignored when `results_by_company` is set.
+Records seen in the last 90 days are not billed again. Results cap at 10,000 per call: 10,000 is a page size, not a total. For more, put what you have into an exclusion list and run the next call with `exclusion_query_id`, and keep turning pages until the results run dry; `discolike bulk companies` runs that loop (`flows.md` Flow 10). Exclusion lists hold up to 250,000 domains and 500,000 contacts on every plan. `max_records` has a floor of 20. Contacts pulled per domain list have no 10,000 ceiling; page them by slicing the domain list, since `offset` is ignored when `results_by_company` is set.
 
 Set `relevance` on discover (MCP, API, CLI, SDK) to stop the ranked list once estimated ICP fit drops too low: `BALANCED` by default for mapping a market, `MAX_RELEVANCE` when the user wants only the closest matches, `MAX_COVERAGE` when they want the whole market and accept a borderline tail. Leaving it out means no automatic stop. An empty later page means the search reached the edge of the market. `variance` is deprecated; old values map onto `relevance`.
 
 ## After discovery
 
-- Contacts at the matched companies: contacts search with a persona description, seniority, or department. Returns email, phone, LinkedIn. Every email comes back unverified (`email_validated` is null). The `email_validated` filter is deprecated and now only means `has_email`, so do not set it; use `has_email` to require an address. For a proven address, run the names through the email finder (`flows.md` Flow 1 step 6); verifying an address the user already has is the in-app Verify button only.
+- Contacts at the matched companies: a contacts run with the companies (a prompt, a domain list, or lookalikes) and the job titles to find. It returns name, title, and LinkedIn per person, searches the web for companies where nobody was found, lets the user review fit, and only then finds and verifies work emails (`flows.md` Flow 1).
+- Emails for people the user already has (name and company domain, optionally a known address): the email finder confirms the known address or finds the right one (`flows.md` Flow 1 step 7).
 - Enrich a list you already have: bizdata, vendors, growth, score, redirects, subsidiaries per domain, or bulk append from CSV.
 - Find lookalikes of a customer list segment by segment: a prospecting run with `customer_domains` groups the customers and expands each group (Flow 11). Segment and run lookalikes per cluster by hand (Flow 4) only when the user wants to review clusters before any search.
-- Validate a list against an ICP description: fit yes/no with a confidence level and reasoning per domain.
+- Validate a list against an ICP description: fit per company with a confidence level (`flows.md` Flow 1 step 3).
 - Push to HubSpot, Salesforce, Pipedrive via the CRM tools.
 
 Every one of these is a numbered flow in `flows.md`. Async steps return a job; wait on it before the next step. Save intermediate result sets as queries so later steps reference an id instead of re-sending domains.
@@ -110,5 +110,4 @@ companies = client.discover(DiscoverParams(domain=["stripe.com", "adyen.com"], e
 
 - MCP page and install snippets: https://discolike.com/mcp.md
 - API page with examples: https://discolike.com/api.md
-- Pricing for agents: https://discolike.com/pricing.md
 - Everything: https://discolike.com/llms.txt

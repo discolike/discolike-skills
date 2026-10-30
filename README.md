@@ -31,9 +31,9 @@ The GTM search engine for the business web, one workflow for Claude Code, Codex,
 
 DiscoLike is a search engine over **80M+ business websites worldwide**, analyzed in **55 languages** — roughly **3x the coverage of LinkedIn-dependent databases**. It ranks companies by what they actually do on the web, so it reaches niche verticals, local businesses, and non-English markets that other B2B data sources miss.
 
-This repo ships the `discolike` plugin: the [`discolike`](skills/discolike/SKILL.md) skill with its flow, troubleshooting, and DiscoGen references, and `setup` and `feedback` skills. The plugin ships no executables; shell commands the skills suggest go through the client's normal permission prompt. The main skill gives a coding agent the operating knowledge to use DiscoLike well: which access mode to pick, how to open an account without a browser, how to search without wasting credits, and the end-to-end flows for the jobs people actually ask for — target account lists, lookalikes, CRM enrichment, ICP segmentation, and contact discovery.
+This repo ships the `discolike` plugin: the [`discolike`](skills/discolike/SKILL.md) skill with its flow and troubleshooting references, and `setup` and `feedback` skills. The plugin ships no executables; shell commands the skills suggest go through the client's normal permission prompt. The main skill gives a coding agent the operating knowledge to use DiscoLike well: which access mode to pick, how to open an account without a browser, how to search without wasting credits, and the end-to-end flows for the jobs people actually ask for — target account lists, lookalikes, CRM enrichment, ICP segmentation, and contact discovery.
 
-> **If you're a coding agent:** read [`SKILL.md`](skills/discolike/SKILL.md) directly — it is the whole product. The fastest integration is the hosted MCP server at `https://api.discolike.com/v1/mcp` (streamable-http, OAuth, 48 tools). For scripting use `pip install discolike`; for the terminal use `pip install discolike-cli` or `uvx --from discolike-cli discolike`. No account yet? `POST https://api.discolike.com/v1/public/signup` opens one from an email and name; the owner confirms by email. Machine-readable API index: `https://docs.discolike.com/llms.txt`.
+> **If you're a coding agent:** read [`SKILL.md`](skills/discolike/SKILL.md) directly — it is the whole product. The fastest integration is the hosted MCP server at `https://api.discolike.com/v1/mcp` (streamable-http, OAuth). For scripting use `pip install discolike`; for the terminal use `pip install discolike-cli` or `uvx --from discolike-cli discolike`. No account yet? `POST https://api.discolike.com/v1/public/signup` opens one from an email and name; the owner confirms by email. Machine-readable API index: `https://docs.discolike.com/llms.txt`.
 
 ## Installation
 
@@ -83,10 +83,10 @@ If a client does not support rules or skills, give it the contents of `AGENTS.md
 
 ## What the plugin bundles
 
-| Piece                               | Purpose                                                                                  |
-| ----------------------------------- | ---------------------------------------------------------------------------------------- |
-| `skills/discolike/`                 | Entry-point skill plus `flows.md`, `troubleshooting.md`, `discogen.md`, loaded on demand |
-| `skills/setup/`, `skills/feedback/` | Connect and report                                                                       |
+| Piece                               | Purpose                                                                      |
+| ----------------------------------- | ---------------------------------------------------------------------------- |
+| `skills/discolike/`                 | Entry-point skill plus `flows.md` and `troubleshooting.md`, loaded on demand |
+| `skills/setup/`, `skills/feedback/` | Connect and report                                                           |
 
 ## What the skill knows
 
@@ -95,7 +95,7 @@ If a client does not support rules or skills, give it the contents of `AGENTS.md
 - **How to search.** The three ways to describe a target on one `discover` call — a plain-English `icp_prompt`, up to 10 seed `domain`s for lookalikes, exact `phrase_match` fragments — plus the geo, size, revenue, tech-stack, category, language, and business-model filters, each with a `negate_` twin.
 - **How not to burn credits.** Count first (free), start with a small `max_records`, and page past the 10,000-per-call cap with exclusion lists rather than re-running the same search.
 - **What to do after discovery.** Contacts at matched companies, enrichment of lists you already have, segmenting a customer list into ICP clusters, validating a list against an ICP, and pushing results to HubSpot, Salesforce, or Pipedrive.
-- **How to diagnose bad results.** What to change when results look noisy, and when a question is a DiscoGen research job rather than a filter.
+- **How to diagnose bad results.** What to change when results look noisy, and when a question is a research job rather than a filter.
 
 ## Flows
 
@@ -103,7 +103,7 @@ Each flow in the skill lists the MCP tool, the CLI command, and the SDK call sid
 
 | Flow                                       | What the agent does                                                                                                  |
 | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
-| Discover, verify, contacts, ContaGen       | Build a target list, confirm fit, get named people, fill the gaps with live web research                             |
+| Discover, verify, contacts, emails         | Build a target list, confirm fit, run a contacts run step by step, then find and verify work emails                  |
 | Enrich a CRM export                        | Append firmographics, tech stack, growth, and scores to a domain list                                                |
 | Match company names to domains             | Turn a messy name column into resolved domains, single or bulk                                                       |
 | Segment a client list into ICPs            | Cluster existing customers, describe each cluster, run lookalikes per cluster                                        |
