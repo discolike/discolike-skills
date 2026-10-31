@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Contacts move onto contacts runs. Flow 1 uses `find-contacts`, then `continue-contacts-run` one step at a time (find contacts, find missing, review, find emails), relaying each step's estimate and asking for an `email_cap_usd` before emails; `get-contacts-run` reads and lists runs. Fit checks use `discover-similar-companies` with `validate=true`. `find-emails` finds and verifies emails for people the user already has, with an optional known address. CLI and SDK contacts search, count, and generate are deprecated.
+- Contacts move onto contacts runs. Flow 1 uses `find-contacts`, then `continue-contacts-run` one step at a time (find contacts, find missing, review, find emails), relaying each step's estimate before it runs, with `email_cap_usd` optional; `get-contacts-run` reads and lists runs. Fit checks use `discover-similar-companies` with `validate=true`. `find-emails` finds and verifies emails for people the user already has, with an optional known address. CLI and SDK contacts search, count, and generate are deprecated.
 - Research tools are gone from MCP, so the skill no longer covers them: `discogen.md` is removed, and research questions point to the web app and REST API. The skill no longer quotes prices or rates.
 - `country` takes continent codes (`EUROPE`, `ASIA`, `AFRICA`, `NORTH_AMERICA`, `SOUTH_AMERICA`, `OCEANIA`, `ANTARCTICA`); `EU` means the 27 member states only.
 - Flow 11: MCP prospecting runs pause for the user instead of spending on emails alone. Poll `get-prospecting-run`, relay its `question` (and the email `estimate` at a contacts review), and send the user's answer with `answer-prospecting`; MCP runs no longer need REST, SDK, CLI, or the web app to resume.
