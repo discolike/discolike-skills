@@ -97,7 +97,7 @@ New account, no ICP written down, or "set up my ICP".
 
 1. **Base list.** Flow 1 steps 1 and 2, or an existing saved query.
 2. **Deterministic signals first.** Technology in use: `tech_stack` on discover, or MCP `vendor-and-technology-data`, CLI `discolike company vendors example.com --format json`, SDK `client.companies.vendors(CompaniesVendorsParams(domain=..., match="client"))`. Growth and footprint: `growth-metrics`, `digital-footprint-score`. Homepage wording: `phrase_match`. No model call for anything a filter answers.
-3. **Research for the rest.** A question no filter or signal answers ("do they publish hospital case studies?") is a research job, which the MCP tools do not run; DiscoLike's web app and REST API do. DiscoGen BYOK remains available there. Ask one question for the whole list with a structured answer: `{"answer": "yes|no|unknown", "evidence": "<quote from the page>", "confidence": 0-1}`. Drop `unknown`; do not turn it into `no`.
+3. **Research for the rest.** A question no filter or signal answers ("do they publish hospital case studies?") is a research job, which the MCP tools do not run; DiscoLike's web app and REST API do.
 4. **Route.** `yes` rows go to the campaign with the evidence quote carried as a merge field, so the first line of outreach cites the fact. Everything else goes to a separate list or waits for the next signal.
 5. **Contacts** for the qualified set only, Flow 1 steps 4 to 7.
 
