@@ -71,7 +71,7 @@ Set `relevance` on discover (MCP, API, CLI, SDK) to stop the ranked list once es
 
 ## After discovery
 
-- Contacts at the matched companies: MCP `find-contacts`, then `get-contacts-run`; optionally `cancel-contacts-run` or `push-to-crm` with the contacts run. Inputs are companies, fit text (default "Senior executives and decision makers"), maximum companies and maximum per company (`flows.md` Flow 1). Only Valid and Valid Catch All contacts are delivered, with their work emails already validated. Do not re-verify them: Valid Catch All proves the mailbox even when another verifier reports catch-all or unknown.
+- Contacts at the matched companies: MCP `find-contacts`, then `get-contacts-run`; optionally `cancel-contacts-run` or `push-to-crm` with the contacts run. Inputs are companies, fit text (default "Senior executives and decision makers"), maximum companies and maximum per company (`flows.md` Flow 1). Only Validated and Validated (catch-all resolved) contacts are delivered, with their work emails already validated. Do not re-verify them: Validated (catch-all resolved) proves the mailbox even when another verifier reports catch-all or unknown.
 - Enrich a list you already have: bizdata, vendors, growth, score, redirects, subsidiaries per domain, or bulk append from CSV.
 - Find lookalikes of a customer list segment by segment: a prospecting run with `customer_domains` groups the customers and expands each group (Flow 11). Segment and run lookalikes per cluster by hand (Flow 4) only when the user wants to review clusters before any search.
 - Validate a list against an ICP description: fit per company with a confidence level (`flows.md` Flow 1 step 3).
