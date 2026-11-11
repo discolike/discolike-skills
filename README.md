@@ -33,7 +33,7 @@ DiscoLike is a search engine over **80M+ business websites worldwide**, analyzed
 
 This repo ships the `discolike` plugin: the [`discolike`](skills/discolike/SKILL.md) skill with its flow and troubleshooting references, and `setup` and `feedback` skills. The plugin ships no executables; shell commands the skills suggest go through the client's normal permission prompt. The main skill gives a coding agent the operating knowledge to use DiscoLike well: which access mode to pick, how to open an account without a browser, how to search without wasting credits, and the end-to-end flows for the jobs people actually ask for; target account lists, lookalikes, CRM enrichment, ICP segmentation, and contact discovery.
 
-> **If you're a coding agent:** read [`SKILL.md`](skills/discolike/SKILL.md) directly; it is the whole product. The fastest integration is the hosted MCP server at `https://api.discolike.com/v1/mcp` (streamable-http, OAuth). For scripting use `pip install discolike`; for the terminal use `pip install discolike-cli` or `uvx --from discolike-cli discolike`. No account yet? `POST https://api.discolike.com/v1/public/signup` opens one from an email and name; the owner confirms by email. Machine-readable API index: `https://docs.discolike.com/llms.txt`.
+> **If you're a coding agent:** read [`SKILL.md`](skills/discolike/SKILL.md) directly; it is the whole product. The fastest integration is the hosted MCP server at `https://api.discolike.com/v1/mcp` (streamable-http, OAuth). For scripting use `pip install discolike`; for the terminal use `pip install discolike-cli` or `uvx --from discolike-cli discolike`. No account yet? Sign up at https://discolike.com/signup/. Machine-readable API index: `https://docs.discolike.com/llms.txt`.
 
 ## Installation
 
@@ -91,7 +91,7 @@ If a client does not support rules or skills, give it the contents of `AGENTS.md
 ## What the skill knows
 
 - **Which door to use.** MCP server for clients that support remote MCP, CLI when shelling out, Python SDK when writing a script, REST as a last resort; and when to ask the user before wiring any of them up.
-- **How to open an account from the agent.** One `POST` with an email and name, no browser, no credential returned; the owner confirms by email and picks a plan.
+- **Where to send a user without an account.** The signup page; the agent never creates the account itself.
 - **How to search.** The three ways to describe a target on one `discover` call; a plain-English `icp_prompt`, up to 10 seed `domain`s for lookalikes, exact `phrase_match` fragments; plus the geo, size, revenue, tech-stack, category, language, and business-model filters, each with a `negate_` twin.
 - **How not to burn credits.** Count first (free), start with a small `max_records`, and page past the 10,000-per-call cap with exclusion lists rather than re-running the same search.
 - **What to do after discovery.** Contacts at matched companies, enrichment of lists you already have, segmenting a customer list into ICP clusters, validating a list against an ICP, and pushing results to HubSpot, Salesforce, or Pipedrive.
@@ -119,7 +119,7 @@ The plugin talks to these services, and only these:
 
 | Service                               | When                                                                              | What is sent                                                                              |
 | ------------------------------------- | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `api.discolike.com`                   | Every MCP, CLI, SDK, or REST call, and account signup                             | Search filters, domains, uploaded lists, and the email and name given at signup           |
+| `api.discolike.com`                   | Every MCP, CLI, SDK, or REST call                                                 | Search filters, domains, and uploaded lists                                               |
 | GitHub (`github.com`)                 | `feedback` skill: the user opens a prefilled issue link and submits it themselves | The issue title and body the user approved, as a public issue in a `Discolike` repository |
 | `discolike.com`, `docs.discolike.com` | When the agent reads DiscoLike documentation                                      | Page requests; no user data                                                               |
 
@@ -130,7 +130,6 @@ Results that include contacts (names, emails) are written to local files the age
 - **MCP server**: [discolike.com/mcp](https://discolike.com/mcp/); hosted, OAuth 2.1, install snippets for every major client
 - **Python SDK and CLI**: [github.com/Discolike/discolike-python](https://github.com/Discolike/discolike-python)
 - **API documentation**: [docs.discolike.com](https://docs.discolike.com)
-- **Agent signup guide**: [docs.discolike.com/guides/agent-signup](https://docs.discolike.com/guides/agent-signup/)
 
 ## Support & contact
 

@@ -2,6 +2,7 @@
 
 ## 1.1.3 - 2026-11-10
 
+- Skills no longer create accounts: a user without one is sent to https://discolike.com/signup/, which no-account API and MCP errors also return.
 - Removed Flow 11 (managed prospecting runs). The MCP server no longer offers the prospecting tools; build lists with discovery and contacts runs (Flows 1 and 4) instead.
 
 ## 1.1.2 - 2026-11-10

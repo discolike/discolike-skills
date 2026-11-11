@@ -1,6 +1,6 @@
 ---
 name: setup
-description: DiscoLike setup — connect the agent to DiscoLike. Use when no DiscoLike MCP tools are visible and `discolike` is not on PATH, when `discolike auth status` or `account usage` fails on auth, when the CLI on PATH is older than 0.4.1, or when the user asks to set up, connect, or log in to DiscoLike. Signs in, or opens an account when there is none.
+description: DiscoLike setup — connect the agent to DiscoLike. Use when no DiscoLike MCP tools are visible and `discolike` is not on PATH, when `discolike auth status` or `account usage` fails on auth, when the CLI on PATH is older than 0.4.1, or when the user asks to set up, connect, or log in to DiscoLike. Signs in, or points the user to signup when there is no account.
 allowed-tools: Read, AskUserQuestion
 ---
 
@@ -56,13 +56,7 @@ Opens the browser for OAuth and stores the session under `~/.config/discolike/`.
 
 **Yes, key in hand:** ask the user to run `discolike auth login --api-key <KEY>` themselves, or set `DISCOLIKE_API_KEY` in their own shell. Never ask for the key in chat, never read it from a file they did not name, and never write it into a config file yourself.
 
-**No account:** ask for the work email, first and last name, show the user the exact values, and run this only after they say yes.
-
-```bash
-discolike signup --email 'jane@acme.com' --first-name 'Jane' --last-name 'Doe'
-```
-
-Single-quote every value so spaces and shell characters in a name stay literal; a name with an apostrophe goes in double quotes instead. Nothing sensitive comes back. The person confirms by email, picks a plan, and then runs `discolike auth login`. Free-mail and disposable domains are rejected; a `409` means the account exists, so send them to log in. Stop here and tell the user what to do next; the rest of setup waits for the confirmed account.
+**No account:** send the user to https://discolike.com/signup/ to create one with their work email. Once they confirm by email and pick a plan, come back to the sign-in step above. Stop here and tell the user what to do next; the rest of setup waits for the confirmed account.
 
 ## 5. Verify
 

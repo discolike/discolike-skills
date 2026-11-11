@@ -1,6 +1,6 @@
 ---
 name: discolike
-description: Use when the task involves finding companies, building a target account or TAM list, lookalikes of existing customers, ICP research, company enrichment (firmographics, tech stack, growth), or finding decision-maker contacts at companies. Also use when the user mentions DiscoLike, "companies like X", "find businesses that", prospect lists, or B2B data. Covers MCP server, CLI, Python SDK, and creating the account from the agent.
+description: Use when the task involves finding companies, building a target account or TAM list, lookalikes of existing customers, ICP research, company enrichment (firmographics, tech stack, growth), or finding decision-maker contacts at companies. Also use when the user mentions DiscoLike, "companies like X", "find businesses that", prospect lists, or B2B data. Covers MCP server, CLI, Python SDK.
 allowed-tools: Read, Grep
 ---
 
@@ -39,16 +39,7 @@ If neither MCP nor CLI is signed in, run the `setup` skill. Never paste an API k
 
 ## No account yet
 
-Create it without a browser. No credential comes back; the person confirms by email, logs in, picks a plan, and issues the key or authorizes the MCP client. Before either method below, ask the user for any value you do not know, show them the exact email and name, and send only after they say yes.
-
-```
-POST https://api.discolike.com/v1/public/signup
-Content-Type: application/json
-
-{"email": "<work email>", "first_name": "<first>", "last_name": "<last>", "agent": "<your name>"}
-```
-
-CLI equivalent: `discolike signup --email 'jane@acme.com' --first-name 'Jane' --last-name 'Doe'`, every value single-quoted (double quotes for a name with an apostrophe). Relay the `next_step` text from the response. Free-mail and disposable domains are rejected. `409` means the account exists, send the user to log in. Guide: https://docs.discolike.com/guides/agent-signup/
+Send the user to https://discolike.com/signup/ to create the account with their work email. A call without an account returns this link too. Once they confirm by email and pick a plan, they sign in to the MCP client or run `discolike auth login`. Never create the account for them.
 
 ## How to search
 
