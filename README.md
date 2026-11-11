@@ -29,11 +29,11 @@ The GTM search engine for the business web, one workflow for Claude Code, Codex,
 
 ---
 
-DiscoLike is a search engine over **80M+ business websites worldwide**, analyzed in **55 languages** — roughly **3x the coverage of LinkedIn-dependent databases**. It ranks companies by what they actually do on the web, so it reaches niche verticals, local businesses, and non-English markets that other B2B data sources miss.
+DiscoLike is a search engine over **80M+ business websites worldwide**, analyzed in **55 languages**; roughly **3x the coverage of LinkedIn-dependent databases**. It ranks companies by what they actually do on the web, so it reaches niche verticals, local businesses, and non-English markets that other B2B data sources miss.
 
-This repo ships the `discolike` plugin: the [`discolike`](skills/discolike/SKILL.md) skill with its flow, troubleshooting, and DiscoGen references, and `setup` and `feedback` skills. The plugin ships no executables; shell commands the skills suggest go through the client's normal permission prompt. The main skill gives a coding agent the operating knowledge to use DiscoLike well: which access mode to pick, how to open an account without a browser, how to search without wasting credits, and the end-to-end flows for the jobs people actually ask for — target account lists, lookalikes, CRM enrichment, ICP segmentation, and contact discovery.
+This repo ships the `discolike` plugin: the [`discolike`](skills/discolike/SKILL.md) skill with its flow and troubleshooting references, and `setup` and `feedback` skills. The plugin ships no executables; shell commands the skills suggest go through the client's normal permission prompt. The main skill gives a coding agent the operating knowledge to use DiscoLike well: which access mode to pick, how to open an account without a browser, how to search without wasting credits, and the end-to-end flows for the jobs people actually ask for; target account lists, lookalikes, CRM enrichment, ICP segmentation, and contact discovery.
 
-> **If you're a coding agent:** read [`SKILL.md`](skills/discolike/SKILL.md) directly — it is the whole product. The fastest integration is the hosted MCP server at `https://api.discolike.com/v1/mcp` (streamable-http, OAuth, 48 tools). For scripting use `pip install discolike`; for the terminal use `pip install discolike-cli` or `uvx --from discolike-cli discolike`. No account yet? `POST https://api.discolike.com/v1/public/signup` opens one from an email and name; the owner confirms by email. Machine-readable API index: `https://docs.discolike.com/llms.txt`.
+> **If you're a coding agent:** read [`SKILL.md`](skills/discolike/SKILL.md) directly; it is the whole product. The fastest integration is the hosted MCP server at `https://api.discolike.com/v1/mcp` (streamable-http, OAuth). For scripting use `pip install discolike`; for the terminal use `pip install discolike-cli` or `uvx --from discolike-cli discolike`. No account yet? `POST https://api.discolike.com/v1/public/signup` opens one from an email and name; the owner confirms by email. Machine-readable API index: `https://docs.discolike.com/llms.txt`.
 
 ## Installation
 
@@ -83,33 +83,33 @@ If a client does not support rules or skills, give it the contents of `AGENTS.md
 
 ## What the plugin bundles
 
-| Piece                               | Purpose                                                                                  |
-| ----------------------------------- | ---------------------------------------------------------------------------------------- |
-| `skills/discolike/`                 | Entry-point skill plus `flows.md`, `troubleshooting.md`, `discogen.md`, loaded on demand |
-| `skills/setup/`, `skills/feedback/` | Connect and report                                                                       |
+| Piece                               | Purpose                                                                      |
+| ----------------------------------- | ---------------------------------------------------------------------------- |
+| `skills/discolike/`                 | Entry-point skill plus `flows.md` and `troubleshooting.md`, loaded on demand |
+| `skills/setup/`, `skills/feedback/` | Connect and report                                                           |
 
 ## What the skill knows
 
-- **Which door to use.** MCP server for clients that support remote MCP, CLI when shelling out, Python SDK when writing a script, REST as a last resort — and when to ask the user before wiring any of them up.
+- **Which door to use.** MCP server for clients that support remote MCP, CLI when shelling out, Python SDK when writing a script, REST as a last resort; and when to ask the user before wiring any of them up.
 - **How to open an account from the agent.** One `POST` with an email and name, no browser, no credential returned; the owner confirms by email and picks a plan.
-- **How to search.** The three ways to describe a target on one `discover` call — a plain-English `icp_prompt`, up to 10 seed `domain`s for lookalikes, exact `phrase_match` fragments — plus the geo, size, revenue, tech-stack, category, language, and business-model filters, each with a `negate_` twin.
+- **How to search.** The three ways to describe a target on one `discover` call; a plain-English `icp_prompt`, up to 10 seed `domain`s for lookalikes, exact `phrase_match` fragments; plus the geo, size, revenue, tech-stack, category, language, and business-model filters, each with a `negate_` twin.
 - **How not to burn credits.** Count first (free), start with a small `max_records`, and page past the 10,000-per-call cap with exclusion lists rather than re-running the same search.
 - **What to do after discovery.** Contacts at matched companies, enrichment of lists you already have, segmenting a customer list into ICP clusters, validating a list against an ICP, and pushing results to HubSpot, Salesforce, or Pipedrive.
-- **How to diagnose bad results.** What to change when results look noisy, and when a question is a DiscoGen research job rather than a filter.
+- **How to diagnose bad results.** What to change when results look noisy, and when a question is a research job rather than a filter.
 
 ## Flows
 
-Each flow in the skill lists the MCP tool, the CLI command, and the SDK call side by side, so the agent can execute it in whichever mode is connected.
+Contacts and prospecting flows use MCP. Other flows include CLI and SDK examples where available.
 
 | Flow                                       | What the agent does                                                                                                  |
 | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
-| Discover, verify, contacts, ContaGen       | Build a target list, confirm fit, get named people, fill the gaps with live web research                             |
+| Discover, verify, contacts, emails         | Build a target list, confirm company fit, then deliver Validated and Validated (catch-all resolved) contacts with validated work emails |
 | Enrich a CRM export                        | Append firmographics, tech stack, growth, and scores to a domain list                                                |
 | Match company names to domains             | Turn a messy name column into resolved domains, single or bulk                                                       |
 | Segment a client list into ICPs            | Cluster existing customers, describe each cluster, run lookalikes per cluster                                        |
 | Market map to N                            | Grow a list to a target size with exclusion-list paging                                                              |
 | ICP from a website                         | Derive a target profile from one URL and search on it                                                                |
-| Signal-qualified list                      | "Find X that run Shopify", "that are hiring SDRs", "that have a pricing page" — discover, then qualify on the signal |
+| Signal-qualified list                      | "Find X that run Shopify", "that are hiring SDRs", "that have a pricing page"; discover, then qualify on the signal  |
 | Technology and infrastructure targeting    | Find companies by the vendors and stack they run                                                                     |
 | Rank or filter a list the user already has | Score an existing list against an ICP instead of discovering new companies                                           |
 
@@ -127,7 +127,7 @@ Results that include contacts (names, emails) are written to local files the age
 
 ## Related
 
-- **MCP server**: [discolike.com/mcp](https://discolike.com/mcp/) — hosted, OAuth 2.1, install snippets for every major client
+- **MCP server**: [discolike.com/mcp](https://discolike.com/mcp/); hosted, OAuth 2.1, install snippets for every major client
 - **Python SDK and CLI**: [github.com/Discolike/discolike-python](https://github.com/Discolike/discolike-python)
 - **API documentation**: [docs.discolike.com](https://docs.discolike.com)
 - **Agent signup guide**: [docs.discolike.com/guides/agent-signup](https://docs.discolike.com/guides/agent-signup/)

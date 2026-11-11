@@ -1,9 +1,12 @@
 # Changelog
 
-## Unreleased
+## 1.1.2 - 2026-11-10
 
+- Contacts use automatic `find-contacts`, `get-contacts-run` and optional `cancel-contacts-run`, with fit text, company and per-company limits, live progress, and CRM push by contacts run ID. Only Valid and Valid Catch All contacts are delivered; no re-verification is needed.
+- Contacts search is free. Every delivery bills 5 records per validated contact with a $10 per 1,000 contacts floor, plus 1 record per company delivering at least one. Repeats are billed; companies with none are free.
+- Research remains in the web app and REST API, including DiscoGen BYOK. The released `POST /contacts/discover` contract is unchanged.
 - `country` takes continent codes (`EUROPE`, `ASIA`, `AFRICA`, `NORTH_AMERICA`, `SOUTH_AMERICA`, `OCEANIA`, `ANTARCTICA`); `EU` means the 27 member states only.
-- Flow 11: MCP prospecting runs pause for the user instead of spending on emails alone. Poll `get-prospecting-run`, relay its `question` (and the email `estimate` at a contacts review), and send the user's answer with `answer-prospecting`; MCP runs no longer need REST, SDK, CLI, or the web app to resume.
+- Flow 11: MCP prospecting delivers validated contacts automatically, with progress polling and user answers through `answer-prospecting` when a question is returned.
 - Discover takes `relevance` (`MAX_RELEVANCE`, `BALANCED`, `MAX_COVERAGE`) to stop where estimated ICP fit drops too low; the skill defaults to `BALANCED` for market mapping. `variance` is deprecated; old values map onto `relevance`, and the skill no longer sets it.
 
 ## 1.1.1 - 2026-10-07
