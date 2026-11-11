@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.1.2 - 2026-11-10
 
 - Contacts use automatic `find-contacts`, `get-contacts-run` and optional `cancel-contacts-run`, with fit text, company and per-company limits, live progress, and CRM push by contacts run ID. Only Valid and Valid Catch All contacts are delivered; no re-verification is needed.
 - Contacts search is free. Every delivery bills 5 records per validated contact with a $10 per 1,000 contacts floor, plus 1 record per company delivering at least one. Repeats are billed; companies with none are free.
