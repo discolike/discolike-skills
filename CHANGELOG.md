@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.3 - 2026-11-10
+
+- Removed Flow 11 (managed prospecting runs). The MCP server no longer offers the prospecting tools; build lists with discovery and contacts runs (Flows 1 and 4) instead.
+
 ## 1.1.2 - 2026-11-10
 
 - Contacts use automatic `find-contacts`, `get-contacts-run` and optional `cancel-contacts-run`, with fit text, company and per-company limits, live progress, and CRM push by contacts run ID. Only Valid and Valid Catch All contacts are delivered; no re-verification is needed.

@@ -99,19 +99,19 @@ If a client does not support rules or skills, give it the contents of `AGENTS.md
 
 ## Flows
 
-Contacts and prospecting flows use MCP. Other flows include CLI and SDK examples where available.
+Contacts flows use MCP. Other flows include CLI and SDK examples where available.
 
-| Flow                                       | What the agent does                                                                                                  |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| Flow                                       | What the agent does                                                                                                                     |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
 | Discover, verify, contacts, emails         | Build a target list, confirm company fit, then deliver Validated and Validated (catch-all resolved) contacts with validated work emails |
-| Enrich a CRM export                        | Append firmographics, tech stack, growth, and scores to a domain list                                                |
-| Match company names to domains             | Turn a messy name column into resolved domains, single or bulk                                                       |
-| Segment a client list into ICPs            | Cluster existing customers, describe each cluster, run lookalikes per cluster                                        |
-| Market map to N                            | Grow a list to a target size with exclusion-list paging                                                              |
-| ICP from a website                         | Derive a target profile from one URL and search on it                                                                |
-| Signal-qualified list                      | "Find X that run Shopify", "that are hiring SDRs", "that have a pricing page"; discover, then qualify on the signal  |
-| Technology and infrastructure targeting    | Find companies by the vendors and stack they run                                                                     |
-| Rank or filter a list the user already has | Score an existing list against an ICP instead of discovering new companies                                           |
+| Enrich a CRM export                        | Append firmographics, tech stack, growth, and scores to a domain list                                                                   |
+| Match company names to domains             | Turn a messy name column into resolved domains, single or bulk                                                                          |
+| Segment a client list into ICPs            | Cluster existing customers, describe each cluster, run lookalikes per cluster                                                           |
+| Market map to N                            | Grow a list to a target size with exclusion-list paging                                                                                 |
+| ICP from a website                         | Derive a target profile from one URL and search on it                                                                                   |
+| Signal-qualified list                      | "Find X that run Shopify", "that are hiring SDRs", "that have a pricing page"; discover, then qualify on the signal                     |
+| Technology and infrastructure targeting    | Find companies by the vendors and stack they run                                                                                        |
+| Rank or filter a list the user already has | Score an existing list against an ICP instead of discovering new companies                                                              |
 
 ## Data and privacy
 
