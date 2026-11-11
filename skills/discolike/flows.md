@@ -1,6 +1,6 @@
 # DiscoLike flows
 
-Read the flow you need, not the file. Use MCP for the contacts and prospecting flows. Other flows include CLI and SDK examples where available. Load `troubleshooting.md` when results look wrong.
+Read the flow you need, not the file. Use MCP for the contacts flows. Other flows include CLI and SDK examples where available. Load `troubleshooting.md` when results look wrong.
 
 Async steps return a job or a run; wait on it before the next step. Save intermediate result sets as queries so later steps reference an id instead of re-sending domains.
 
@@ -58,8 +58,6 @@ The user has names, maybe city or phone, and no websites.
 3. **Then enrich** with Flow 2, or match domainless connected CRM companies with MCP `crm-match-companies`.
 
 ### Flow 4: segment a client list into ICPs
-
-Prefer Flow 11 with `customer_domains`: it does steps 1 to 3 in one run, splits the target across segments and tags every company with its segment. Use the steps below when the user wants to review clusters before any search, or needs segments without prospecting.
 
 The user has their customers and wants to know what kinds of companies they actually sell to, then find more of each kind.
 
@@ -128,16 +126,6 @@ New account, no ICP written down, or "set up my ICP".
 Calibrate the company query first (Flow 5). Page company discovery with exclusion lists so pages do not overlap; 10,000 is the per-call company limit. Count the market before committing to a large paid company pull.
 
 For contacts, use the same validated delivery flow at every size (Flow 1 steps 4 to 7). Split company domains into batches of at most 10,000 and set `run.max_companies`, `run.per_company` and an agreed `run.email_cap` for each batch. Poll and page each run by company. Export rows as they arrive and record the run ID and progress cursor so recovery reads the existing run. Use `run.create_key` when retrying the same start request. Starting a new run delivers and bills contacts again, even for companies already processed. Do not estimate yield or throughput from the maximum per company; report actual validated contacts and companies covered.
-
-### Flow 11: agentic prospecting run
-
-Use this for a chat-driven brief instead of a hand-tuned discovery call. Prospecting delivers only Validated and Validated (catch-all resolved) contacts, with validated work emails, using the same automatic contacts flow as Flow 1. Do not re-verify them. Contacts search is free; each delivery costs 5 records per validated contact with a $10 per 1,000 contacts floor, plus 1 record per company delivering at least one when searching without a supplied company list. Repeated deliveries are billed; companies with none are free.
-
-1. **Start.** MCP `start-prospecting` takes `brief` and `idempotency_key`. Put the description in `brief.brief` (10 to 4,000 characters), the company target in `brief.target_companies` (1 to 10,000, MCP default 100), and the maximum contacts per company in `brief.contacts_per_company`. Agree the delivery scope and costs before starting. Reuse the key only when retrying the same start request. MCP auto-approves its plan and runs the contacts work automatically.
-2. **Select companies.** `brief.domains` means prospect exactly those domains; `brief.company_names` supplies company names. For lookalikes of existing customers, use `brief.customer_domains` instead, which cannot be combined with either of those inputs. `brief.exclude_domains` excludes companies. Describe the desired people in the brief.
-3. **Poll.** Call `get-prospecting-run` with `run_id` every 5 seconds. Use `offset` and `limit` (1 to 100, default 100) to page partial results, and `events_after` to read later progress events. If it returns `needs_input` with a `question`, relay the question to the user. Send their answer through `answer-prospecting` with `run_id`, the current `question_seq`, their `text`, and a fresh `idempotency_key`; reuse that key only for a retry of the same answer. Never invent an answer. Keep polling until `completed`, `failed` or `cancelled`; relay `run_timeout` or `action_uncertain` for user intervention.
-4. **Deliver or stop.** `cancel-prospecting` with `run_id` stops further work and retains completed results. Check `status`, `stop_reason`, `error` and actual delivered counts before reporting success. Completed does not necessarily mean the target was reached. Export every ID in `saved_query_ids`, or push each with `push-to-crm` using `query_id` and `provider`; the prospecting run ID is not a contacts run ID. Tell the user when results are partial before a CRM push.
-5. **Quota errors.** Reading, answering and cancellation remain available on an active eligible account after quota exhaustion, although an answer that schedules paid work may fail until quota is refilled. Relay the actual error instead of guessing whether it means missing payment setup, plan eligibility or a daily limit.
 
 ### Replicating a search from the app
 

@@ -17,7 +17,6 @@ Requires a paid plan. Counting results is free.
 | `flows.md`           | Running any end-to-end job: target list, CRM enrichment, name-to-domain matching, ICP segmentation, market map, ICP from a website, signal qualification, tech-stack targeting, scoring an existing list. |
 | `troubleshooting.md` | Results look noisy, counts do not add up, or the user says "these are wrong".                                                                                                                             |
 | `flows.md` Flow 10   | The user wants everything that matches, tens of thousands of companies or 100,000+ contacts, or asks to replicate an app search over the API.                                                             |
-| `flows.md` Flow 11   | The user wants a chat-driven prospecting run instead of a hand-tuned discover call, including live progress and big-list targets.                                                                         |
 
 Read a file when its row applies; do not load both up front. A question that no filter or signal answers ("do they sell to hospitals?", "estimated ad spend?") is research: use the deterministic signals in `flows.md` Flow 7 first, and if the question still needs research, tell the user DiscoLike's web app and REST API cover it.
 
@@ -73,7 +72,7 @@ Set `relevance` on discover (MCP, API, CLI, SDK) to stop the ranked list once es
 
 - Contacts at the matched companies: MCP `find-contacts`, then `get-contacts-run`; optionally `cancel-contacts-run` or `push-to-crm` with the contacts run. Inputs are companies, fit text (default "Senior executives and decision makers"), maximum companies and maximum per company (`flows.md` Flow 1). Only Validated and Validated (catch-all resolved) contacts are delivered, with their work emails already validated. Do not re-verify them: Validated (catch-all resolved) proves the mailbox even when another verifier reports catch-all or unknown.
 - Enrich a list you already have: bizdata, vendors, growth, score, redirects, subsidiaries per domain, or bulk append from CSV.
-- Find lookalikes of a customer list segment by segment: a prospecting run with `customer_domains` groups the customers and expands each group (Flow 11). Segment and run lookalikes per cluster by hand (Flow 4) only when the user wants to review clusters before any search.
+- Find lookalikes of a customer list segment by segment: segment the customers, then run lookalikes per cluster (Flow 4).
 - Validate a list against an ICP description: fit per company with a confidence level (`flows.md` Flow 1 step 3).
 - Push to HubSpot, Salesforce, Pipedrive via the CRM tools.
 
