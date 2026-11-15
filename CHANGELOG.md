@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- `phrase_match` terms accept `|` alternatives for plurals and synonyms: `+dental|dentists` requires either form. Documented in the parameter table, Flow tips and troubleshooting.
+
 ## 1.1.3 - 2026-11-10
 
 - Removed Flow 11 (managed prospecting runs). The MCP server no longer offers the prospecting tools; build lists with discovery and contacts runs (Flows 1 and 4) instead.
