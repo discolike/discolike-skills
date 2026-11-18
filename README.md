@@ -76,7 +76,7 @@ For a personal global Codex installation, fetch the core skill and the job skill
 ```bash
 for skill in discolike discover-lookalike-companies find-validated-contacts enrich-crm match-company-domains \
   segment-customers map-tam build-icp-from-website target-by-tech-and-signals \
-  score-account-list run-app-search fix-bad-results; do
+  score-account-list fix-bad-results; do
   mkdir -p ~/.agents/skills/$skill
   curl -fsSL https://raw.githubusercontent.com/Discolike/discolike-skills/main/skills/$skill/SKILL.md \
     -o ~/.agents/skills/$skill/SKILL.md
@@ -119,7 +119,6 @@ The contacts skill uses MCP. Other job skills include CLI and SDK examples where
 | [`build-icp-from-website`](skills/build-icp-from-website/SKILL.md)             | Derive a target profile from one URL and search on it                                                          |
 | [`target-by-tech-and-signals`](skills/target-by-tech-and-signals/SKILL.md)     | Find companies by vendor, tech stack, or signals such as hiring SDRs or having a pricing page                  |
 | [`score-account-list`](skills/score-account-list/SKILL.md)                     | Rank or filter an existing account list                                                                        |
-| [`run-app-search`](skills/run-app-search/SKILL.md)                             | Replicate a Discover or Contacts search from a screenshot or form settings                                     |
 | [`fix-bad-results`](skills/fix-bad-results/SKILL.md)                           | Diagnose noisy results, unexpected counts, and contact delivery or billing issues                              |
 
 ## Data and privacy

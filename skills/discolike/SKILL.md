@@ -23,7 +23,6 @@ Requires a paid plan. Counting results is free.
 | Draft an ICP from a website                                                                    | [`build-icp-from-website`](../build-icp-from-website/SKILL.md)             |
 | Find companies by technology, infrastructure, or qualification signals                         | [`target-by-tech-and-signals`](../target-by-tech-and-signals/SKILL.md)     |
 | Rank, filter, or research an existing account list                                             | [`score-account-list`](../score-account-list/SKILL.md)                     |
-| Replicate a Discover or Contacts search from the app                                           | [`run-app-search`](../run-app-search/SKILL.md)                             |
 | Troubleshoot noisy results, counts, contact delivery, or charges                               | [`fix-bad-results`](../fix-bad-results/SKILL.md)                           |
 
 Load the job skill that applies. Job skills include CLI and SDK examples where available. Load the `fix-bad-results` skill when results look wrong.
@@ -78,6 +77,8 @@ Three ways to describe the target, all on the same `discover` call. Combine them
 Company discovery and enrichment records seen in the last 24 hours on Pay as you go or 30 days on subscriptions are not billed again. Contacts delivery is billed every time. Results cap at 10,000 per call: 10,000 is a page size, not a total. For more, put what you have into an exclusion list and run the next call with `exclusion_query_id`, and keep turning pages until the results run dry; `discolike bulk companies` runs that loop (see the `map-tam` skill). Exclusion lists hold up to 250,000 domains and 500,000 contacts on every plan. `max_records` has a floor of 20.
 
 Set `relevance` on discover (MCP, API, CLI, SDK) to stop the ranked list once estimated ICP fit drops too low: `BALANCED` by default for mapping a market, `MAX_RELEVANCE` when the user wants only the closest matches, `MAX_COVERAGE` when they want the whole market and accept a borderline tail. Leaving it out means no automatic stop. An empty later page means the search reached the edge of the market. `variance` is deprecated; old values map onto `relevance`.
+
+Less common `discover` parameters: `category` is upper snake case (`ADVERTISING_AND_MARKETING`, `HEALTHCARE`); `min_digital_footprint` and `max_digital_footprint` bound site presence; `redirect: false` skips profiles that redirect; `include_search_domains: true` keeps the seed domains in the results; `exclude_leadgen: true` drops lead-gen sites. To pass ICP text as a ranking signal without letting it set filters, use `icp_text`, not `icp_prompt`: the prompt extracts and applies its own filters, ICP text and seed domains, so a search built from a user's exact settings stops matching them. CLI flags follow the parameter names (`--min-similarity 70`, `--no-redirect`, `--exclude-leadgen`); anything without a flag goes through `--param key=value`, and a whole set goes in as `--params-file params.json` (a JSON object keyed by parameter names, for company `discover` and `count`). The CLI validates the assembled request against the SDK model before the first billable call; in a script, `DiscoverParams.model_validate(...)` does the same.
 
 ## After discovery
 
