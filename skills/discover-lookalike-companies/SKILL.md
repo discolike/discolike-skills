@@ -1,5 +1,5 @@
 ---
-name: discolike-target-list
+name: discover-lookalike-companies
 description: Use when the user asks for a target account list, a list of "companies like X", or to "find businesses that" match an ICP. Follow the discolike skill's access and spend rules.
 allowed-tools: Read, Grep
 ---

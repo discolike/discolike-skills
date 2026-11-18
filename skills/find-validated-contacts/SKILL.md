@@ -1,5 +1,5 @@
 ---
-name: discolike-contacts
+name: find-validated-contacts
 description: Use when the user asks to "find VP Sales contacts at these companies", "get validated work emails", "check company fit", or deliver contacts at scale. Follow the discolike skill's access and spend rules.
 allowed-tools: Read, Grep
 ---
@@ -8,7 +8,7 @@ allowed-tools: Read, Grep
 
 Follow the `discolike` skill's How to work rules first.
 
-Build a target list, check company fit if needed, then find people with validated work emails. If you need to build the list, load the `discolike-target-list` skill.
+Build a target list, check company fit if needed, then find people with validated work emails. If you need to build the list, load the `discover-lookalike-companies` skill.
 
 Use MCP for contacts.
 

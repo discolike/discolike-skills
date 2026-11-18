@@ -1,5 +1,5 @@
 ---
-name: discolike-market-map
+name: map-tam
 description: Use when the user asks to "map our whole addressable market", "find thousands of accounts", or "get every company that matches", including pulls past 10,000 companies. Follow the discolike skill's access and spend rules.
 allowed-tools: Read, Grep
 ---
@@ -8,7 +8,7 @@ allowed-tools: Read, Grep
 
 Follow the `discolike` skill's How to work rules first.
 
-The user wants the whole addressable market, thousands of accounts, not a sample. Once the query is calibrated, use the paging instructions below past 10,000 companies. When the user wants contacts at every account, use the batching instructions in the `discolike-contacts` skill.
+The user wants the whole addressable market, thousands of accounts, not a sample. Once the query is calibrated, use the paging instructions below past 10,000 companies. When the user wants contacts at every account, use the batching instructions in the `find-validated-contacts` skill.
 
 1. **Anchor.** Count with the structural filters alone (country, size, category). That number is the ceiling; if it is far from the user's own estimate, the filters are wrong, fix them before spending.
 2. **Calibrate on 50.** One inclusion-only pull, `max_records=50`, seeds plus `icp_prompt`, `relevance="BALANCED"`, no negations. Validate fit. Then change one lever per round: first exclude the high-similarity wrong-category anchors, then add two or three confirmed fits as seeds, and only then add a phrase. Never negate a phrase the real targets also use. Excluding a domain: MCP `discover-similar-companies` with `negate_domain` (shapes the ranking), CLI `--param negate_domain=a.com,b.com`, SDK `exclude_domain` (hard filter only). Re-run at 200 and read ranks 1 to 10, 90 to 100, and 190 to 200; quality decays with rank, and the tail tells you where to stop.

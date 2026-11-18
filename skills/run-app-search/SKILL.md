@@ -1,5 +1,5 @@
 ---
-name: discolike-replicate-app-search
+name: run-app-search
 description: Use when the user shares a screenshot or settings from the DiscoLike Discover or Contacts form and asks to run "this exact search" through the MCP server, API, or CLI. Follow the discolike skill's access and spend rules.
 allowed-tools: Read, Grep
 ---
@@ -24,7 +24,7 @@ Users paste screenshots of the Discover and Contacts forms and ask for "this exa
 | Skip Profiles with Redirects           | `redirect: false`                                                                                                                              |
 | Include Lookalike Query Domains        | `include_search_domains: true`                                                                                                                 |
 | Exclude Lead Gen                       | `exclude_leadgen: true`                                                                                                                        |
-| Contacts: Companies                    | `run.companies`, using a prompt, domain list or lookalike selection from the `discolike-contacts` skill                                        |
+| Contacts: Companies                    | `run.companies`, using a prompt, domain list or lookalike selection from the `find-validated-contacts` skill                                   |
 | Contacts: Who                          | `run.people.fit`, default "Senior executives and decision makers"                                                                              |
 | Contacts: Max Companies                | `run.max_companies`, companies delivering at least one validated contact                                                                       |
 | Contacts: Max Per Company              | `run.per_company`, integer from 1 to 50                                                                                                        |

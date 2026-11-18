@@ -1,5 +1,5 @@
 ---
-name: discolike-icp-from-website
+name: build-icp-from-website
 description: Use when the user asks to "set up my ICP", "build an ICP from our website", or draft an ICP from a best customer's domain. Follow the discolike skill's access and spend rules.
 allowed-tools: Read, Grep
 ---

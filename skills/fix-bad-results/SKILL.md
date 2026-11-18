@@ -1,5 +1,5 @@
 ---
-name: discolike-troubleshoot
+name: fix-bad-results
 description: Use when the user says "these results are wrong", "the counts do not add up", "why did I get fewer contacts?", or asks about verifier disagreements or repeat delivery charges. Follow the discolike skill's access and spend rules.
 allowed-tools: Read, Grep
 ---
