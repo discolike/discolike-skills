@@ -76,7 +76,8 @@ For a personal global Codex installation, fetch the core skill and the job skill
 ```bash
 for skill in discolike discover-lookalike-companies find-validated-contacts enrich-crm match-company-domains \
   segment-customers map-tam build-icp-from-website target-by-tech-and-signals \
-  score-account-list fix-bad-results; do
+  score-account-list fix-bad-results check-icp-fit explain-usage-and-billing \
+  clean-crm map-corporate-family; do
   mkdir -p ~/.agents/skills/$skill
   curl -fsSL https://raw.githubusercontent.com/Discolike/discolike-skills/main/skills/$skill/SKILL.md \
     -o ~/.agents/skills/$skill/SKILL.md
@@ -108,18 +109,22 @@ If a client does not support rules or skills, give it the contents of `AGENTS.md
 
 The contacts skill uses MCP. Other job skills include CLI and SDK examples where available.
 
-| Skill                                                                          | What the agent does                                                                                            |
-| ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
-| [`discover-lookalike-companies`](skills/discover-lookalike-companies/SKILL.md) | Size the target set, discover companies, and build nonoverlapping rounds                                       |
-| [`find-validated-contacts`](skills/find-validated-contacts/SKILL.md)           | Check company fit and deliver Validated and Validated (catch-all resolved) contacts with validated work emails |
-| [`enrich-crm`](skills/enrich-crm/SKILL.md)                                     | Append firmographics, tech stack, growth, and scores to a domain list                                          |
-| [`match-company-domains`](skills/match-company-domains/SKILL.md)               | Resolve company names to domains, individually or in bulk                                                      |
-| [`segment-customers`](skills/segment-customers/SKILL.md)                       | Cluster existing customers, describe each cluster, and run lookalikes per cluster                              |
-| [`map-tam`](skills/map-tam/SKILL.md)                                           | Grow a list to a target size with exclusion-list paging                                                        |
-| [`build-icp-from-website`](skills/build-icp-from-website/SKILL.md)             | Derive a target profile from one URL and search on it                                                          |
-| [`target-by-tech-and-signals`](skills/target-by-tech-and-signals/SKILL.md)     | Find companies by vendor, tech stack, or signals such as hiring SDRs or having a pricing page                  |
-| [`score-account-list`](skills/score-account-list/SKILL.md)                     | Rank or filter an existing account list                                                                        |
-| [`fix-bad-results`](skills/fix-bad-results/SKILL.md)                           | Diagnose noisy results, unexpected counts, and contact delivery or billing issues                              |
+| Skill                                                                          | What the agent does                                                                           |
+| ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| [`discover-lookalike-companies`](skills/discover-lookalike-companies/SKILL.md) | Size the target set, discover companies, and build nonoverlapping rounds                      |
+| [`find-validated-contacts`](skills/find-validated-contacts/SKILL.md)           | Deliver Validated and Validated (catch-all resolved) contacts with validated work emails      |
+| [`enrich-crm`](skills/enrich-crm/SKILL.md)                                     | Append firmographics, tech stack, growth, and scores to a domain list                         |
+| [`match-company-domains`](skills/match-company-domains/SKILL.md)               | Resolve company names to domains, individually or in bulk                                     |
+| [`segment-customers`](skills/segment-customers/SKILL.md)                       | Cluster existing customers, describe each cluster, and run lookalikes per cluster             |
+| [`map-tam`](skills/map-tam/SKILL.md)                                           | Grow a list to a target size with exclusion-list paging                                       |
+| [`build-icp-from-website`](skills/build-icp-from-website/SKILL.md)             | Derive a target profile from one URL and search on it                                         |
+| [`target-by-tech-and-signals`](skills/target-by-tech-and-signals/SKILL.md)     | Find companies by vendor, tech stack, or signals such as hiring SDRs or having a pricing page |
+| [`score-account-list`](skills/score-account-list/SKILL.md)                     | Rank or filter an existing account list                                                       |
+| [`fix-bad-results`](skills/fix-bad-results/SKILL.md)                           | Diagnose noisy results, unexpected counts, and contact delivery issues                        |
+| [`check-icp-fit`](skills/check-icp-fit/SKILL.md)                               | Validate companies against an ICP and pass the positive domains to contact search             |
+| [`explain-usage-and-billing`](skills/explain-usage-and-billing/SKILL.md)       | Explain usage, credit balances, cycle timing, and costs                                       |
+| [`clean-crm`](skills/clean-crm/SKILL.md)                                       | Audit operating status, suppress or import existing records, and fill missing websites        |
+| [`map-corporate-family`](skills/map-corporate-family/SKILL.md)                 | Find parent and child domains, shared contact details, and redirects                          |
 
 ## Data and privacy
 
