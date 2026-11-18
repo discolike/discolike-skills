@@ -1,6 +1,6 @@
 ---
 name: discolike
-description: Use when the task involves finding companies, building a target account or TAM list, lookalikes of existing customers, ICP research, company enrichment (firmographics, tech stack, growth), or finding decision-maker contacts at companies. Also use when the user mentions DiscoLike, "companies like X", "find businesses that", prospect lists, or B2B data. Covers MCP server, CLI, Python SDK, and creating the account from the agent.
+description: Use when the task involves finding companies, building a target account or TAM list, lookalikes of existing customers, ICP research, company enrichment (firmographics, tech stack, growth), or finding decision-maker contacts at companies. Also use when the user mentions DiscoLike, "companies like X", "find businesses that", prospect lists, or B2B data. Covers MCP server, CLI, Python SDK, and creating the account from the agent, and routes each job to its own skill.
 allowed-tools: Read, Grep
 ---
 
@@ -10,23 +10,34 @@ DiscoLike is a search engine over 80M+ crawled business websites. It returns com
 
 Requires a paid plan. Counting results is free.
 
-## Files in this skill
+## Job skills
 
-| File                 | Read it when                                                                                                                                                                                              |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `flows.md`           | Running any end-to-end job: target list, CRM enrichment, name-to-domain matching, ICP segmentation, market map, ICP from a website, signal qualification, tech-stack targeting, scoring an existing list. |
-| `troubleshooting.md` | Results look noisy, counts do not add up, or the user says "these are wrong".                                                                                                                             |
-| `flows.md` Flow 10   | The user wants everything that matches, tens of thousands of companies or 100,000+ contacts, or asks to replicate an app search over the API.                                                             |
+| Job                                                                                            | Skill to load                                                                  |
+| ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Build a target account list or find company lookalikes                                         | [`discolike-target-list`](../discolike-target-list/SKILL.md)                   |
+| Check company fit, find validated contacts, or batch contact lists including 100,000+ contacts | [`discolike-contacts`](../discolike-contacts/SKILL.md)                         |
+| Enrich a CRM export, a domain list, or existing CRM records                                    | [`discolike-enrich-crm`](../discolike-enrich-crm/SKILL.md)                     |
+| Match company names to domains                                                                 | [`discolike-match-domains`](../discolike-match-domains/SKILL.md)               |
+| Segment existing customers and find lookalikes per segment                                     | [`discolike-segment-customers`](../discolike-segment-customers/SKILL.md)       |
+| Map a market at scale or page past 10,000 companies                                            | [`discolike-market-map`](../discolike-market-map/SKILL.md)                     |
+| Draft an ICP from a website                                                                    | [`discolike-icp-from-website`](../discolike-icp-from-website/SKILL.md)         |
+| Find companies by technology, infrastructure, or qualification signals                         | [`discolike-signals-and-tech`](../discolike-signals-and-tech/SKILL.md)         |
+| Rank, filter, or research an existing account list                                             | [`discolike-score-my-list`](../discolike-score-my-list/SKILL.md)               |
+| Replicate a Discover or Contacts search from the app                                           | [`discolike-replicate-app-search`](../discolike-replicate-app-search/SKILL.md) |
+| Troubleshoot noisy results, counts, contact delivery, or charges                               | [`discolike-troubleshoot`](../discolike-troubleshoot/SKILL.md)                 |
 
-Read a file when its row applies; do not load both up front. A question that no filter or signal answers ("do they sell to hospitals?", "estimated ad spend?") is research: use the deterministic signals in `flows.md` Flow 7 first, and if the question still needs research, tell the user DiscoLike's web app and REST API cover it.
+Load the job skill that applies. Job skills include CLI and SDK examples where available. Load the `discolike-troubleshoot` skill when results look wrong.
+
+A question that no filter or signal answers ("do they sell to hospitals?", "estimated ad spend?") is research: use the deterministic signals in the `discolike-signals-and-tech` skill first, and if the question still needs research, tell the user DiscoLike's web app and REST API cover it.
 
 ## How to work
 
 - **Confirm the account once.** First DiscoLike call in a session: MCP `account-status`, CLI `discolike account usage`, or SDK `client.account.usage()`. Tell the user the plan and remaining quota in one line. If it fails on auth, run the `setup` skill.
 - **Narrate, then summarize.** Say what you are about to run and why; turn JSON into a count, a short table, or a sentence. Raw output only on request. Write full result sets to disk as JSON or CSV; chat output truncates.
 - **Position it as DiscoLike's product.** "DiscoLike lets you…", "you can…". Not "skills I have".
-- **Spend rule.** Counting is free. Company discovery and enrichment use the plan's quota. Contacts delivery costs 5 records per validated contact, with a $10 per 1,000 contacts floor, plus 1 record per company delivering at least one when searching without a supplied company list. Both contact statuses cost the same. Every delivery is billed, including repeats. Before a paid pull larger than a sample (about 100 records), explain the scope and cost and get a yes. For contacts, agree the company target, maximum per company and delivery budget before starting; the run proceeds automatically. Reuse approval for the same scope; ask again only if the scope or estimate grows. Do not volunteer the balance otherwise.
+- **Spend rule.** Counting is free. Company discovery and enrichment use the plan's quota. Contacts delivery costs 5 records per validated contact, with a $10 per 1,000 contacts floor, plus 1 record per company delivering at least one when searching without a supplied company list. Both contact statuses cost the same. Every delivery is billed, including repeats. Before a paid pull larger than a sample (about 100 records), explain the size, scope and cost and get a yes. For contacts, agree the company target, maximum per company and delivery budget before starting; the run proceeds automatically. Reuse approval for the same scope; ask again only if the scope or estimate grows. Do not volunteer the balance otherwise.
 - **Plain CLI calls.** One `discolike` command at a time, `--format json`, optionally piped to `jq`.
+- **Wait and save.** Async steps return a job or a run; wait on it before the next step. Save intermediate result sets as queries so later steps reference an id instead of re-sending domains.
 
 ## Pick the access mode
 
@@ -64,19 +75,17 @@ Three ways to describe the target, all on the same `discover` call. Combine them
 | Size the set         | `count` with the same filters                                                                                                            | Free. Do this before a large `discover`. It sizes the hard market definition, not the lookalike ranking: it takes no seed `domain` and no ICP description, and defaults `exclude_leadgen` to false where `discover` defaults it to true, so it reads higher than the pull that follows. Pass `exclude_leadgen=true` to compare like with like. |
 | Cap spend            | `max_records`                                                                                                                            | Start with 100 to 500 to check fit, then scale.                                                                                                                                                                                                                                                                                                |
 
-Company discovery and enrichment records seen in the last 24 hours on Pay as you go or 30 days on subscriptions are not billed again. Contacts delivery is billed every time. Results cap at 10,000 per call: 10,000 is a page size, not a total. For more, put what you have into an exclusion list and run the next call with `exclusion_query_id`, and keep turning pages until the results run dry; `discolike bulk companies` runs that loop (`flows.md` Flow 10). Exclusion lists hold up to 250,000 domains and 500,000 contacts on every plan. `max_records` has a floor of 20.
+Company discovery and enrichment records seen in the last 24 hours on Pay as you go or 30 days on subscriptions are not billed again. Contacts delivery is billed every time. Results cap at 10,000 per call: 10,000 is a page size, not a total. For more, put what you have into an exclusion list and run the next call with `exclusion_query_id`, and keep turning pages until the results run dry; `discolike bulk companies` runs that loop (see the `discolike-market-map` skill). Exclusion lists hold up to 250,000 domains and 500,000 contacts on every plan. `max_records` has a floor of 20.
 
 Set `relevance` on discover (MCP, API, CLI, SDK) to stop the ranked list once estimated ICP fit drops too low: `BALANCED` by default for mapping a market, `MAX_RELEVANCE` when the user wants only the closest matches, `MAX_COVERAGE` when they want the whole market and accept a borderline tail. Leaving it out means no automatic stop. An empty later page means the search reached the edge of the market. `variance` is deprecated; old values map onto `relevance`.
 
 ## After discovery
 
-- Contacts at the matched companies: MCP `find-contacts`, then `get-contacts-run`; optionally `cancel-contacts-run` or `push-to-crm` with the contacts run. Inputs are companies, fit text (default "Senior executives and decision makers"), maximum companies and maximum per company (`flows.md` Flow 1). Only Validated and Validated (catch-all resolved) contacts are delivered, with their work emails already validated. Do not re-verify them: Validated (catch-all resolved) proves the mailbox even when another verifier reports catch-all or unknown.
-- Enrich a list you already have: bizdata, vendors, growth, score, redirects, subsidiaries per domain, or bulk append from CSV.
-- Find lookalikes of a customer list segment by segment: segment the customers, then run lookalikes per cluster (Flow 4).
-- Validate a list against an ICP description: fit per company with a confidence level (`flows.md` Flow 1 step 3).
-- Push to HubSpot, Salesforce, Pipedrive via the CRM tools.
-
-Every one of these is a numbered flow in `flows.md`. Async steps return a job; wait on it before the next step. Save intermediate result sets as queries so later steps reference an id instead of re-sending domains.
+- Contacts at the matched companies: MCP `find-contacts`, then `get-contacts-run`; optionally `cancel-contacts-run` or `push-to-crm` with the contacts run. Inputs are companies, fit text (default "Senior executives and decision makers"), maximum companies and maximum per company (see the `discolike-contacts` skill). Only Validated and Validated (catch-all resolved) contacts are delivered, with their work emails already validated. Do not re-verify them: Validated (catch-all resolved) proves the mailbox even when another verifier reports catch-all or unknown.
+- Enrich a list you already have: bizdata, vendors, growth, score, redirects, subsidiaries per domain, or bulk append from CSV (see the `discolike-enrich-crm` skill).
+- Find lookalikes of a customer list segment by segment: segment the customers, then run lookalikes per cluster (see the `discolike-segment-customers` skill).
+- Validate a list against an ICP description: fit per company with a confidence level (see the Check company fit step in the `discolike-contacts` skill).
+- Push to HubSpot, Salesforce, Pipedrive via the CRM tools (see the `discolike-contacts` and `discolike-enrich-crm` skills).
 
 ## Examples
 

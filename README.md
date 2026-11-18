@@ -31,9 +31,9 @@ The GTM search engine for the business web, one workflow for Claude Code, Codex,
 
 DiscoLike is a search engine over **80M+ business websites worldwide**, analyzed in **55 languages**; roughly **3x the coverage of LinkedIn-dependent databases**. It ranks companies by what they actually do on the web, so it reaches niche verticals, local businesses, and non-English markets that other B2B data sources miss.
 
-This repo ships the `discolike` plugin: the [`discolike`](skills/discolike/SKILL.md) skill with its flow and troubleshooting references, and `setup` and `feedback` skills. The plugin ships no executables; shell commands the skills suggest go through the client's normal permission prompt. The main skill gives a coding agent the operating knowledge to use DiscoLike well: which access mode to pick, how to open an account without a browser, how to search without wasting credits, and the end-to-end flows for the jobs people actually ask for; target account lists, lookalikes, CRM enrichment, ICP segmentation, and contact discovery.
+The `discolike` plugin includes the [core skill](skills/discolike/SKILL.md), job skills for tasks such as target account lists, lookalikes, CRM enrichment, ICP segmentation, and contact discovery, and the `setup` and `feedback` skills. The core skill covers choosing an access mode, opening an account without a browser, and managing search spend. The plugin bundles skill documentation, client configuration, and icons. Shell commands suggested by the skills use the client's normal permission prompt.
 
-> **If you're a coding agent:** read [`SKILL.md`](skills/discolike/SKILL.md) directly; it is the whole product. The fastest integration is the hosted MCP server at `https://api.discolike.com/v1/mcp` (streamable-http, OAuth). For scripting use `pip install discolike`; for the terminal use `pip install discolike-cli` or `uvx --from discolike-cli discolike`. No account yet? `POST https://api.discolike.com/v1/public/signup` opens one from an email and name; the owner confirms by email. Machine-readable API index: `https://docs.discolike.com/llms.txt`.
+> **If you're a coding agent:** read the [core skill](skills/discolike/SKILL.md) first and load the skill for the job you need. The fastest integration is the hosted MCP server at `https://api.discolike.com/v1/mcp` (streamable-http, OAuth). For scripting use `pip install discolike`; for the terminal use `pip install discolike-cli` or `uvx --from discolike-cli discolike`. No account yet? `POST https://api.discolike.com/v1/public/signup` opens one from an email and name; the owner confirms by email. Machine-readable API index: `https://docs.discolike.com/llms.txt`.
 
 ## Installation
 
@@ -46,7 +46,7 @@ Add the marketplace once, then install the plugin:
 /plugin install discolike@discolike
 ```
 
-The skill activates automatically when a task involves finding companies, building a target or TAM list, lookalikes, ICP research, company enrichment, or decision-maker contacts.
+The core skill and relevant job skills activate automatically for tasks such as finding companies, building a target or TAM list, lookalikes, ICP research, company enrichment, or decision-maker contacts.
 
 ### Any agent with the `skills` CLI
 
@@ -58,37 +58,44 @@ npx skills add Discolike/discolike-skills
 
 ### Codex, Cursor, and other agents
 
-Clone this repository into the project or install it as a plugin where the client supports plugins. Every adapter points back to the same canonical [`skills/discolike/SKILL.md`](skills/discolike/SKILL.md), so clients get the same safeguards and product knowledge without maintaining forks.
+Clone this repository into the project or install it as a plugin where the client supports plugins. Each adapter starts with the [core skill](skills/discolike/SKILL.md) for shared safeguards and uses its job table to load the matching skill.
 
-| Client         | Included integration                                            | How it activates                                                                                                                |
-| -------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Claude Code    | `.claude-plugin/` plus `.claude/CLAUDE.md`                      | Install from the Claude marketplace, or open the repo as a project.                                                             |
-| Codex          | `.codex-plugin/plugin.json` plus `AGENTS.md`                    | Install the plugin from a marketplace that contains this repo, or open the repo; `AGENTS.md` routes matching work to the skill. |
-| Cursor         | `.cursor-plugin/plugin.json` plus `.cursor/rules/discolike.mdc` | Install from the Cursor Marketplace, or open or copy the repository rule into a Cursor project.                                 |
-| Gemini CLI     | `gemini-extension.json` plus `GEMINI.md`                        | `gemini extensions install https://github.com/Discolike/discolike-skills`, or open the repo or copy the file into a project.    |
-| GitHub Copilot | `.github/copilot-instructions.md`                               | Open or copy the instruction file into a project.                                                                               |
-| Windsurf       | `.windsurf/rules/discolike.md`                                  | Open or copy the repository rule into a Windsurf project.                                                                       |
-| Grok           | `.grok-plugin/plugin.json` plus `AGENTS.md`                     | Install the plugin where supported, or use the included project instruction file.                                               |
-| Other agents   | `AGENTS.md`                                                     | Use the included project instruction file, or add its two paragraphs to the agent's project instructions.                       |
+| Client         | Included integration                                            | How it activates                                                                                                                          |
+| -------------- | --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Claude Code    | `.claude-plugin/` plus `.claude/CLAUDE.md`                      | Install from the Claude marketplace, or open the repo as a project.                                                                       |
+| Codex          | `.codex-plugin/plugin.json` plus `AGENTS.md`                    | Install the plugin from a marketplace that contains this repo, or open the repo; `AGENTS.md` routes matching work through the core skill. |
+| Cursor         | `.cursor-plugin/plugin.json` plus `.cursor/rules/discolike.mdc` | Install from the Cursor Marketplace, or open or copy the repository rule into a Cursor project.                                           |
+| Gemini CLI     | `gemini-extension.json` plus `GEMINI.md`                        | `gemini extensions install https://github.com/Discolike/discolike-skills`, or open the repo or copy the file into a project.              |
+| GitHub Copilot | `.github/copilot-instructions.md`                               | Open or copy the instruction file into a project.                                                                                         |
+| Windsurf       | `.windsurf/rules/discolike.md`                                  | Open or copy the repository rule into a Windsurf project.                                                                                 |
+| Grok           | `.grok-plugin/plugin.json` plus `AGENTS.md`                     | Install the plugin where supported, or use the included project instruction file.                                                         |
+| Other agents   | `AGENTS.md`                                                     | Use the included project instruction file, or add its two paragraphs to the agent's project instructions.                                 |
 
-For a personal global Codex installation, fetch the canonical skill directly:
+For a personal global Codex installation, fetch the core skill and the job skills directly:
 
 ```bash
-mkdir -p ~/.agents/skills/discolike
-curl -fsSL https://raw.githubusercontent.com/Discolike/discolike-skills/main/skills/discolike/SKILL.md \
-  -o ~/.agents/skills/discolike/SKILL.md
+for skill in discolike discolike-target-list discolike-contacts discolike-enrich-crm discolike-match-domains \
+  discolike-segment-customers discolike-market-map discolike-icp-from-website discolike-signals-and-tech \
+  discolike-score-my-list discolike-replicate-app-search discolike-troubleshoot; do
+  mkdir -p ~/.agents/skills/$skill
+  curl -fsSL https://raw.githubusercontent.com/Discolike/discolike-skills/main/skills/$skill/SKILL.md \
+    -o ~/.agents/skills/$skill/SKILL.md
+done
 ```
 
-If a client does not support rules or skills, give it the contents of `AGENTS.md` as project instructions. The agent will then load the canonical skill only for relevant tasks instead of carrying the full workflow in every prompt.
+The core `discolike` skill routes each job to the skill beside it under [`skills/`](skills/), so install them together.
+
+If a client does not support rules or skills, give it the contents of `AGENTS.md` as project instructions. The agent can then read the core skill and the relevant job skill for matching tasks.
 
 ## What the plugin bundles
 
-| Piece                               | Purpose                                                                      |
-| ----------------------------------- | ---------------------------------------------------------------------------- |
-| `skills/discolike/`                 | Entry-point skill plus `flows.md` and `troubleshooting.md`, loaded on demand |
-| `skills/setup/`, `skills/feedback/` | Connect and report                                                           |
+| Piece                               | Purpose                                                              |
+| ----------------------------------- | -------------------------------------------------------------------- |
+| `skills/discolike/`                 | Shared access, account, spend, and search guidance, plus job routing |
+| Job skill folders under `skills/`   | Load the matching job skill from the table below                     |
+| `skills/setup/`, `skills/feedback/` | Connect and report                                                   |
 
-## What the skill knows
+## What the core skill covers
 
 - **Which door to use.** MCP server for clients that support remote MCP, CLI when shelling out, Python SDK when writing a script, REST as a last resort; and when to ask the user before wiring any of them up.
 - **How to open an account from the agent.** One `POST` with an email and name, no browser, no credential returned; the owner confirms by email and picks a plan.
@@ -97,21 +104,23 @@ If a client does not support rules or skills, give it the contents of `AGENTS.md
 - **What to do after discovery.** Contacts at matched companies, enrichment of lists you already have, segmenting a customer list into ICP clusters, validating a list against an ICP, and pushing results to HubSpot, Salesforce, or Pipedrive.
 - **How to diagnose bad results.** What to change when results look noisy, and when a question is a research job rather than a filter.
 
-## Flows
+## Job skills
 
-Contacts flows use MCP. Other flows include CLI and SDK examples where available.
+The contacts skill uses MCP. Other job skills include CLI and SDK examples where available.
 
-| Flow                                       | What the agent does                                                                                                                     |
-| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Discover, verify, contacts, emails         | Build a target list, confirm company fit, then deliver Validated and Validated (catch-all resolved) contacts with validated work emails |
-| Enrich a CRM export                        | Append firmographics, tech stack, growth, and scores to a domain list                                                                   |
-| Match company names to domains             | Turn a messy name column into resolved domains, single or bulk                                                                          |
-| Segment a client list into ICPs            | Cluster existing customers, describe each cluster, run lookalikes per cluster                                                           |
-| Market map to N                            | Grow a list to a target size with exclusion-list paging                                                                                 |
-| ICP from a website                         | Derive a target profile from one URL and search on it                                                                                   |
-| Signal-qualified list                      | "Find X that run Shopify", "that are hiring SDRs", "that have a pricing page"; discover, then qualify on the signal                     |
-| Technology and infrastructure targeting    | Find companies by the vendors and stack they run                                                                                        |
-| Rank or filter a list the user already has | Score an existing list against an ICP instead of discovering new companies                                                              |
+| Skill                                                                              | What the agent does                                                                                            |
+| ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| [`discolike-target-list`](skills/discolike-target-list/SKILL.md)                   | Size the target set, discover companies, and build nonoverlapping rounds                                       |
+| [`discolike-contacts`](skills/discolike-contacts/SKILL.md)                         | Check company fit and deliver Validated and Validated (catch-all resolved) contacts with validated work emails |
+| [`discolike-enrich-crm`](skills/discolike-enrich-crm/SKILL.md)                     | Append firmographics, tech stack, growth, and scores to a domain list                                          |
+| [`discolike-match-domains`](skills/discolike-match-domains/SKILL.md)               | Resolve company names to domains, individually or in bulk                                                      |
+| [`discolike-segment-customers`](skills/discolike-segment-customers/SKILL.md)       | Cluster existing customers, describe each cluster, and run lookalikes per cluster                              |
+| [`discolike-market-map`](skills/discolike-market-map/SKILL.md)                     | Grow a list to a target size with exclusion-list paging                                                        |
+| [`discolike-icp-from-website`](skills/discolike-icp-from-website/SKILL.md)         | Derive a target profile from one URL and search on it                                                          |
+| [`discolike-signals-and-tech`](skills/discolike-signals-and-tech/SKILL.md)         | Find companies by vendor, tech stack, or signals such as hiring SDRs or having a pricing page                  |
+| [`discolike-score-my-list`](skills/discolike-score-my-list/SKILL.md)               | Rank or filter an existing account list                                                                        |
+| [`discolike-replicate-app-search`](skills/discolike-replicate-app-search/SKILL.md) | Replicate a Discover or Contacts search from a screenshot or form settings                                     |
+| [`discolike-troubleshoot`](skills/discolike-troubleshoot/SKILL.md)                 | Diagnose noisy results, unexpected counts, and contact delivery or billing issues                              |
 
 ## Data and privacy
 

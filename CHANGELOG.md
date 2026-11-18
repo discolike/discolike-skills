@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+
+- Split DiscoLike workflows into 11 job skills that load on demand. The core skill retains access, account setup, and spending guidance and routes agents to the matching job.
 ## 1.1.3 - 2026-11-10
 
 - Removed Flow 11 (managed prospecting runs). The MCP server no longer offers the prospecting tools; build lists with discovery and contacts runs (Flows 1 and 4) instead.
