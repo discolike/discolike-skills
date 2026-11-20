@@ -1,8 +1,10 @@
 # Changelog
 
-## Unreleased
+## 1.1.4 - 2026-11-19
 
-- `phrase_match` terms accept `|` alternatives for plurals and synonyms: `+dental|dentists` requires either form. Documented in the parameter table, Flow tips and troubleshooting.
+- Contacts runs can seed lookalikes from up to 20 LinkedIn profile URLs, and can opt in to LinkedIn contacts delivered without an email at 1 record each.
+- Split DiscoLike workflows into 14 job skills that load on demand. The core skill retains access, account setup, and spending guidance and routes agents to the matching job.
+- `phrase_match` terms accept `|` alternatives for plurals and synonyms: `+dental|dentists` requires either form.
 
 ## 1.1.3 - 2026-11-10
 

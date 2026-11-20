@@ -1,0 +1,16 @@
+---
+name: clean-crm
+description: Use when the user asks "which of my HubSpot accounts are dead", "do not show me companies already in my CRM", "skip people already in Salesforce", or "find websites for domainless CRM accounts". Follow the `discolike` skill's access and spend rules.
+allowed-tools: Read, Grep
+---
+
+# Clean a connected CRM
+
+Follow the `discolike` skill's How to work rules first.
+
+1. **Check the connection and features.** Use the connected `provider` (`hubspot`, `salesforce`, or `pipedrive`). The CRM must be connected in Settings > Integrations. In account status, check `bulk_matching` for matching and `saved_queries` for audit, suppression, import, and write-back.
+2. **Audit operating status.** MCP `crm-audit-companies` takes `provider` and queues a job for up to 10,000 companies with domains. It writes `active`, `closed`, `redirected to <newdomain>`, or `unknown` to CRM records. HubSpot and Pipedrive receive a status property. Salesforce receives a `DiscoLike status:` line in Description. The destructive annotation marks this CRM write. Archiving is a separate action. Explain the affected records and fields, and get explicit user confirmation before running the audit. Review the saved closed-company list when the job finds closed companies.
+3. **Suppress existing records.** MCP `crm-suppress` takes `provider` and `kind`. Use `companies` (default) to snapshot domains, or `contacts` to snapshot emails and save the people DiscoLike matches by email. The tool queues a saved exclusion list in DiscoLike and leaves CRM records untouched. Use `list-saved-queries` to find the new list by provider tag and timestamp. For company suppression, pass its ID in `filters.exclusion_query_id` for discovery or `run.exclude_query_ids` for MCP contacts. For person-level suppression, use `exclusion_query_id` on REST `POST /v1/contacts/discover`. MCP contact runs read only the domains from exclusion lists.
+4. **Import known domains.** MCP `crm-import-companies` takes `provider` and queues a read of CRM company websites into DiscoLike lists of up to 10,000 domains each, capped at 50,000 domains per import. Find the saved lists with `list-saved-queries` with `filters.tags` set to the `crm:<provider>` tag. Use these domains for enrichment or as the input to a contact run.
+5. **Fill missing websites.** MCP `crm-match-companies` takes `provider` and optional `min_match_confidence` (50 to 100, default 50) and queues a saved match query. Review the matches in DiscoLike. The match job reads from the CRM. If the user wants to update CRM records, show the provider, saved match query, and threshold and get explicit confirmation. Then use `crm-writeback-domains` with `provider`, the match `query_id`, and `min_confidence` (50 to 100, default 70). The queued job writes matches at or above that threshold to the CRM.
+6. **Check completion.** Import, match, audit, and write-back return `task_id` on queueing. Check the job in DiscoLike or poll REST `GET /v1/{task}/status/{task_id}` before reporting completion or using its results. Use `crmimport`, `bulkmatch`, `crmaudit`, or `crmwriteback` respectively for `task`. Suppression returns a queue acknowledgement with `provider` and `kind`; check for the new saved list. Report CRM updates and failures from the completed job when available.
